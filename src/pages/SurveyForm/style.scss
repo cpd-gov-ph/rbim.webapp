@@ -1,0 +1,225 @@
+.reject-reason {
+    margin: 1rem 0rem;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 21px;
+    color: #B0B0B0;
+    border: 1px solid #4B545A;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.survey-form-basic {
+    .title {
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        text-transform: capitalize;
+        color: #242424;
+    }
+
+    .form-check-label {
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 21px;
+        color: #242424;
+    }
+
+    .form-check-inline {
+        margin-right: 3rem;
+    }
+}
+
+.survey-status {
+    background: #E6F2F7;
+    border-radius: 38px !important;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: #242424;
+    width: 132px;
+    height: 34px;
+    text-transform: capitalize;
+    padding: 7px;
+}
+
+.view-survey {
+    .survey_title {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 28px;
+        color: #0086B6;
+        align-self: center;
+    }
+
+    .validate-all-section {
+        .view-notes-btn {
+            button {
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 20px;
+                color: #0086B6;
+                border: 1px solid #0086B6;
+                background: #FFF;
+                border-radius: 4px;
+            }
+        }
+
+        .form-check-inline {
+            align-self: center;
+            margin-right: 2rem;
+        }
+    }
+}
+
+.switch-person-btn {
+    button {
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        color: #0086B6;
+        border: 1px solid #0086B6;
+        background: #FFF;
+    }
+
+    .btn-check:checked+.btn,
+    .btn-check:active+.btn,
+    .btn:active,
+    .btn.active,
+    .btn.show,
+    .btn:hover {
+        color: #0086B6 !important;
+        border: 1px solid #0086B6;
+        background: #FFF !important;
+    }
+
+
+}
+
+.switch-member-name {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    color: #242424;
+    align-self: center;
+    padding: 10px;
+}
+
+.switch-person-body {
+    .card {
+        background: #FFFFFF;
+        box-shadow: 0px 0px 8px rgb(0 0 0 / 8%);
+        border-radius: 4px;
+        margin-bottom: 11px;
+        cursor: pointer;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .member-name {
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 16px;
+        color: #4B545A;
+        align-self: center;
+    }
+
+    svg {
+        font-size: 21px;
+        font-weight: 400
+    }
+}
+
+.sign_section {
+    box-shadow: 0px 0px 10px rgb(0 0 0 / 12%);
+    padding: 40px 40px 40px 10px;
+
+    h3 {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 28px;
+        color: #242424;
+    }
+
+    .desc {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 30px;
+        color: #242424
+    }
+
+    .sig-box {
+        background: #F0F0F4;
+        border: 2px solid #C4C4C4;
+        height: 140px;
+
+        div {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        img {
+            width: 300px;
+            height: 111px;
+        }
+    }
+
+    .sign-name {
+        text-align: center;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 23px;
+        color: #242424;
+    }
+}
+
+.form-check-input,
+.form-check-label {
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.category_section {
+    .view-heading {
+        h3 {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        p {
+            font-weight: 700;
+            font-size: 14px;
+        }
+    }
+
+    .form-label {
+        font-weight: 500;
+        font-size: 15px;
+        display: block;
+    }
+}
+
+.recorection {
+    .form-label {
+        color: #dc3545;
+    }
+    .form-control.main-form-input{
+        border: 2px solid #dc3545;
+
+    }
+}
+.final_recorrection{
+    .sign-reject{
+        input{
+            border: 2px solid #dc3545;
+        }
+    }
+}
+.sign-reject{
+    margin-left: auto !important;
+}

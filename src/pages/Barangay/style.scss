@@ -1,0 +1,149 @@
+.view-details {
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+
+    .view-heading {
+        background: #ECECEC;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 5px 5px 0px 0px;
+        padding: 15px;
+
+        h3 {
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 23px;
+            color: #242424;
+            margin: 0px;
+        }
+    }
+
+    .view-body {
+        padding: 20px;
+        max-width: 60%;
+
+        .view-left {
+            min-width: 50%;
+
+            p {
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 22px;
+                color: #242424;
+            }
+        }
+
+        .view-right {
+            flex-basis: 50%;
+
+            p {
+                font-weight: 400;
+                font-size: 16px;
+                color: #242424;
+                line-height: 22px;
+            }
+        }
+    }
+}
+
+
+.datepicker-add-barangay {
+    width: 100% !important;
+    height: 38px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.375rem !important;
+    padding-left: 13px;
+}
+
+.react-datepicker__input-container input:focus-visible {
+    outline: none !important;
+}
+
+
+.barangay-view-details {
+    @media only screen and (min-width: 767px) and (max-width: 1370px) {
+        .view-body {
+            max-width: 100%;
+
+            .view-left {
+                min-width: 55%;
+            }
+        }
+
+    }
+
+}
+
+.baranLoader {
+    position: absolute;
+    top: 50%;
+    left: 55%;
+}
+
+.address-view {
+    white-space: pre-line;
+}
+
+.barangay-info {
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 14px;
+    margin-top: 14px;
+    margin-bottom: 0px;
+    align-self: center;
+    color: #757575;
+
+    .info-icon {
+        width: 13px;
+        height: 13px;
+        border-radius: 100%;
+        border: 1px solid #757575;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px;
+
+        .fa {
+            color: #757575;
+            font-size: 10px;
+        }
+    }
+
+    div svg {
+        font-size: 14px;
+        color: #757575;
+    }
+}
+
+.phone-group {
+    .input-group-text {
+        background-color: #fff !important;
+        color: #4B545A;
+        border-right: 1px solid #ced4da;
+    }
+
+    input {
+        border-radius: 0 0.375rem 0.375rem 0 !important;
+    }
+}
+
+.profile-phone-group {
+    .input-group-text {
+        background-color: #e9ecef !important;
+        color: #212529 !important
+    }
+}
+
+.react-datepicker-popper {
+    z-index: 3;
+}
+
+.col-form-label {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #242424;
+}
+
+.btn-secondary {
+    border: 1px solid #4B545A;
+}

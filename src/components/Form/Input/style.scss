@@ -1,0 +1,32 @@
+.form-group {
+  margin-bottom: 20px;
+
+  .position {
+    position: relative;
+  }
+  input.form-control {
+    height: 40px;
+    color: #555555;
+    font-size: 14px;
+    font-weight: 500;
+    &.lg {
+      height: 50px;
+    }
+    &.search {
+      background: rgba(127, 162, 184, 0.16);
+      border-radius: 0px 6px 6px 0px;
+      border: 0px;
+      padding-left: 0;
+      border-color: #ced4da !important;
+    }
+  }
+  .invalid-feedback {
+    position: absolute;
+    bottom: -19px;
+    left: 13px;
+    font-size: 11px;
+  }
+}
+.w-40 {
+  width: 40%;
+}

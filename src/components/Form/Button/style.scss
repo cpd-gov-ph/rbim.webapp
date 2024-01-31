@@ -1,0 +1,12 @@
+.btn {
+  padding: 9.5px 1.5rem;
+  box-shadow: none !important;
+}
+.button-width{
+  min-width:156px;
+}
+.btn.btn-outline-primary {
+  &:hover, &:focus, &:active {
+    color: var(--white);
+  }
+}

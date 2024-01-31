@@ -1,0 +1,148 @@
+.login-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(300.21deg, #0086B6 6.13%, rgba(0, 134, 182, 0.844463) 41.36%, rgba(0, 134, 182, 0.68) 80.96%);
+  .content {
+    background: #ffffff;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.18);
+    border-radius: 12px;
+    padding: 30px;
+    p {
+      color: #242424;
+    }
+  }
+}
+
+// ---------------------Forgot-----------------//
+
+.login-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    140.59deg,
+    #7fa2b8 33.13%,
+    rgba(127, 162, 184, 0.46) 91.75%
+  );
+  height: 100vh;
+}
+
+.login-width {
+  width: 35%;
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0px 8px 36px rgba(0, 0, 0, 0.16);
+}
+
+/* p {
+    margin-bottom: 0px!important;
+  } */
+
+.input-bgcolor:focus {
+  background: rgba(123, 151, 206, 0.06) !important;
+}
+.mismatch{
+  border-color:red;
+}
+.user-login-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.getStarted-txt {
+  color: rgba(21, 25, 32, 0.5);
+}
+.medium-txt {
+  font-size: 14px;
+}
+
+.submit-button-style {
+  width: 65%;
+  background-color: #034168 !important;
+  border: none !important;
+  margin: 0 auto;
+  font-weight: 500 !important;
+  color: #fff;
+}
+.submit-button-style:active {
+  width: 65%;
+  background-color: #034168 !important;
+  border: none !important;
+  margin: 0 auto;
+  font-weight: 500 !important;
+  color: #fff;
+}
+
+
+.submit-alignment {
+  text-align: center;
+}
+.blue-color {
+  color: #034168;
+}
+
+.font-weight {
+  font-weight: 700 !important;
+}
+
+.forgotButton-style {
+  margin-top: 35px;
+}
+
+.input-position-style {
+  position: relative;
+}
+.eye-icon-style {
+  position: absolute;
+  top: 38px;
+  right: 12px;
+  color: #818384;
+  font-size: 21px;
+  background-color: transparent;
+  cursor: pointer;
+}
+.cursor {
+  cursor: pointer;
+}
+.error-msg {
+  font-size: 11px;
+  font-weight: normal;
+  border: none !important;
+  text-align: start;
+  display: block;
+  color: #dc3545;
+}
+.form-control.is-valid,
+.was-validated .form-control:valid {
+  background-image: none !important;
+}
+.form-control.is-invalid,
+.was-validated .form-control:invalid {
+  background-image: none !important;
+}
+
+/* ------------------- Media Quires ---------------------------- */
+@media only screen and (max-width: 575px) {
+  .login-width {
+    width: 80%;
+  }
+}
+@media only screen and (min-width: 575px) and (max-width: 768px) {
+  .login-width {
+    width: 50%;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .login-width {
+    width: 50%;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1025px) {
+  .login-width {
+    width: 40%;
+  }
+}

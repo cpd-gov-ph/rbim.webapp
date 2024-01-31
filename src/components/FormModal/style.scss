@@ -1,0 +1,43 @@
+.modal-header {
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.16);
+  border: 0;
+  padding: 1rem;
+
+  .modal-title {
+    font-weight: 600;
+    font-size: 20px;
+  }
+
+  .btn-close {
+    box-shadow: none;
+  }
+}
+
+.modal-body {
+  padding: 2rem;
+
+  .profile-lists ul>li {
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+}
+
+.form-modal {
+  display: flex;
+  flex-direction: column;
+
+  .form-modal-sub-title {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+    color: #7C7C7C;
+    padding: 10px 0px;
+  }
+}
+
+.err-feedback {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 90%;
+  color: #dc3545;
+}

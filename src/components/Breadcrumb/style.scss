@@ -1,0 +1,29 @@
+.custom-breadcrumb {
+    .bread-item{
+        display: flex;
+        .bread-slash{
+            width: 20px;
+            display: flex;
+            justify-content: center;
+            align-self: center;
+        }
+        .bread-sub-title{
+            margin-top: 0.28rem;
+        }
+    }
+    .breadcrumb-item, a {
+        font-size: 20px;
+        &.active{
+            font-style: normal;
+            font-weight: 400;
+            line-height: 23px;
+            color:#242424
+        }
+        &.primary-color.active{
+            color: var(--primary);
+        }
+    }
+}
+.bread-icon{
+    color: black;
+}

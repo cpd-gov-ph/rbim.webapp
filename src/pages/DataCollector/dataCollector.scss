@@ -1,0 +1,59 @@
+.collapse:not(.show) {
+    display: flex !important;
+}
+.accordion{
+    .accordion-header{
+        pointer-events: none;
+    }
+    .accordion-body{
+        .table thead{
+            display: flex;
+            width: 100%;
+            box-shadow: 0px 0px 5px rgb(0 0 0 / 8%);
+            tr{
+                display: flex;
+                width: 56em;
+                justify-content: space-between;
+                
+                th{
+                    display: flex;
+                    padding: 0.8rem 0.5rem;
+                }
+            }
+        }
+        .table tbody{
+            box-shadow: 2px 8px 10px rgb(0 0 0 / 8%);
+            tr{
+                display: flex;
+                justify-content: space-between;
+                border-top: 1px solid #F0F0F1;
+            }        
+
+        }
+    }
+    .accordion-button{
+        background-color: #ECECEC !important;
+        color: #242424 !important;
+    }
+    .accordion-button:not(.collapsed)::after, .accordion-button::after {
+        display: none !important;
+    }
+    .survey{
+        width: 8.5em;
+    }
+}
+
+.basic-div{
+    display: flex;
+    .basic-div-left{
+        margin-right: 110px;
+        .basic-item{
+            margin-bottom: 20px;
+            display: flex;
+            .basic-key{
+                width: 8em;
+                margin-right: 7em;
+            }
+        }
+    }
+}

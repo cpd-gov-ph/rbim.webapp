@@ -1,0 +1,107 @@
+.sidebar {
+  width: 255px;
+  height: calc(100% - 96px);
+  overflow: hidden;
+  outline: none;
+  position: fixed;
+  z-index: 1;
+  overflow-y: auto;
+  left: 0;
+  background: #fff;
+  top: 106px;
+  box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+  .sidebar-item-list {
+    align-items: center;
+  }
+  ul {
+    list-style: none;
+    padding-left: 0;
+    li {
+      a {
+        width: 100%;
+        color: #858585;
+        text-decoration: none;
+        font-weight: 400;
+        display: flex;
+        transition: all 0.2s ease-in-out;
+        padding: 15px 15px;
+        font-size: 14px;
+        margin-bottom: 3px;
+
+        .activeIcon{
+          display: none;
+        }
+        &.active {
+          color: var(--white);
+          text-decoration: none;
+          background: var(--primary5);
+          font-weight: 600;
+          svg {
+            path {
+              fill: var(--white);
+            }
+          }
+          .activeIcon{
+            display: inline-block;
+          }
+          .inactiveIcon{
+            display: none;
+          }
+        }
+        &:hover {
+          color: var(--white);
+          text-decoration: none;
+          background: var(--primary5);
+          font-weight: 600;
+          svg {
+            path {
+              fill: var(--white);
+            }
+          }
+          .activeIcon{
+            display: block;
+          }
+          .inactiveIcon{
+            display: none;
+          }
+        }
+        div {
+          &:first-child {
+            margin-right: 15px;
+            align-self: center;
+          }
+        }
+        img {
+          width: 20px;
+          height: 20px;
+          filter: grayscale(1);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 0px;
+  }
+  .mobileSide {
+    width: 255px;
+    height: calc(100% - 70px);
+    overflow: hidden;
+    outline: none;
+    position: fixed;
+    z-index: 1;
+    overflow-y: auto;
+    left: 0;
+    background: #fff;
+  }
+}
+
+// .reviewer {
+//   div {
+//     &:first-child {
+//       margin-right: 10px !important;
+//     }
+//   }
+// } 

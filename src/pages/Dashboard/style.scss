@@ -1,0 +1,55 @@
+.page_title {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+}
+
+.bread_title>.page_title,
+.page_title {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+}
+
+.page_sub_title {
+    color: var(--sub_title_color);
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 23px;
+}
+
+.dashboard-card {
+    .card {
+        color: #242424;
+        background: rgba(219, 219, 254, 0.5);
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.12);
+        height: 152px;
+        border: none;
+        border-radius: 0px;
+    }
+
+    .card-title {
+        font-weight: 500;
+        font-size: 19px;
+
+        @media only screen and (min-width: 767px) and (max-width: 1370px) {
+            font-size: 14px;
+        }
+    }
+
+    .card-text {
+        font-weight: 700;
+        font-size: 38px;
+        line-height: 56px;
+        text-align: center;
+        margin: 20px 0px;
+
+        @media only screen and (min-width: 767px) and (max-width: 1370px) {
+            font-size: 36px;
+        }
+    }
+
+}

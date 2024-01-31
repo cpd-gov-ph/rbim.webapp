@@ -1,0 +1,124 @@
+.inside-round {
+    border-radius: 100%;
+    width: 72px;
+    height: 72px;
+    background-color: #23597B;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media only screen and (min-width: 900px) and (max-width: 1200px) {
+        width: 57px;
+        height: 57px;
+
+        .inside-title {
+            font-size: 12px !important;
+            padding: 11px !important;
+        }
+    }
+
+    .inside-title {
+        text-align: center;
+        padding: 19px;
+        font-weight: 600;
+        font-size: 17px;
+        color: #FFFFFF;
+        line-height: 12px;
+
+        .inside-sub-title {
+            font-size: 10px;
+            font-weight: 400;
+            padding: 8px 0px;
+        }
+    }
+}
+
+
+.report-chart-section {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 21px;
+    color: #242424;
+
+    .card {
+        //pointer-events: none;
+        canvas {
+            padding: 25px;
+        }
+    }
+
+    .card-body {
+        padding: 0px;
+    }
+
+    .card-title {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 19px;
+        text-align: center;
+        text-transform: capitalize;
+        padding-top: 25px;
+        margin-bottom: 0px;
+    }
+
+    h4 {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 21px;
+        color: #242424;
+        margin-bottom: 15px;
+    }
+
+    .report-round-inside {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        box-sizing: border-box;
+        bottom: 0;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.report-page-sub-title {
+    font-size: 20px;
+    line-height: 23px;
+    color: #575F6E;
+    margin:0px;
+    margin-top:10px
+}
+
+.report-down-btn {
+    text-align: right;
+
+    .btn {
+        border: 1px solid #4B545A;
+        background: #FFF;
+        border-radius: 4px;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        color: #4B545A !important;
+    }
+
+}
+
+.no-report {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: #B2B2B2;
+}
+
+#react-select-3-placeholder,
+#react-select-2-placeholder {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 21px;
+    color: #575F6E;
+}
+.bar_chart_min_height{
+    min-height: 500px;
+}
