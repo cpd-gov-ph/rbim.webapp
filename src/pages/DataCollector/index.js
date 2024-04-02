@@ -5,6 +5,7 @@ import Add from "./Add";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader";
+
 const DataCollector = () => {
   let navigate = useNavigate();
   const [addShowModal, setAddShowModal] = useState(false);
@@ -79,32 +80,37 @@ const DataCollector = () => {
     //   }
     // },
     {
-      dataField: "first_name",
-      text: "Data Collector Name",
+      accessorKey: "first_name",
+      header: "Data Collector Name",
+      cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "15%", textAlign: "left" },
       style: { textAlign: "left" }
     },
     {
-      dataField: "barangay.first_name",
-      text: "Assigned Barangay Name",
+      accessorKey: "barangay.first_name",
+      header: "Assigned Barangay Name",
+      cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "20%", textAlign: "center" },
       style: { textAlign: "center" },
     },
     {
-      dataField: "profile.official_number",
-      text: "DC Code",
+      accessorKey: "profile.official_number",
+      header: "DC Code",
+      cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "17%", textAlign: "center" },
       style: { textAlign: "center" }
     },
     {
-      dataField: "email",
-      text: "Email ID",
+      accessorKey: "email",
+      header: "Email ID",
+      cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "16%", textAlign: "left" },
       style: { textAlign: "left" }
     },
     {
-      dataField: "action",
-      text: "Action",
+      accessorKey: "action",
+      header: "Action",
+      cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "16%", textAlign: "center" },
       formatter: actionButton,
     }
@@ -143,6 +149,7 @@ const DataCollector = () => {
   useEffect(() => {
     getReviewerList(page, sizePerPage, "");
   }, []);
+
   return (
     <>
       {!loading && (

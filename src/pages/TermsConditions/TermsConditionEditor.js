@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './style.scss';
-import CKEditor from "react-ckeditor-component";
+import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import Button from "../../components/Form/Button";
 import { postData, getData } from "../../api";

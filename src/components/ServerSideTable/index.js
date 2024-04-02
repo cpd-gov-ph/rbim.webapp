@@ -1,10 +1,12 @@
-import BootstrapTable from "react-bootstrap-table-next";
+/* import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import overlayFactory from "react-bootstrap-table2-overlay";
+import overlayFactory from "react-bootstrap-table2-overlay"; */
 import { DebounceInput } from "react-debounce-input";
 import Loader from "../Loader";
 import "./style.scss";
 import { useState } from "react";
+import { Box } from '@chakra-ui/react';
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 const ServerSideTable = ({
   data,
@@ -22,11 +24,16 @@ const ServerSideTable = ({
   const onTableChange = (type, { page, sizePerPage }) => {
     onFilter(page, sizePerPage, "");
   };
-
+  const tableInstance = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
   const searchChange = (e) => {
     setSearchValue(e.target.value);
     onFilter(1, sizePerPage, e.target.value);
   };
+
   return (
     <div>
       <div className="server-side-table">
@@ -47,39 +54,41 @@ const ServerSideTable = ({
             </div>
           </div>
           <div className="col-md-9 p-0">{children}</div>
-        </div>
-        <div className="server-table row">
-          <div className={`col-md-12 ${data.length === 0 ?"hide_pagination" : null}`}>
-            <BootstrapTable
-              remote
-              keyField="id"
-              data={data}
-              columns={columns}
-              bordered={false}
-              noDataIndication={loading ? " " : noDataMessage}
-              headerWrapperClasses="thead-dark"
-              bodyClasses="tableBody"
-              wrapperClasses="table-responsive customScroll"
-              pagination={paginationFactory({
-                page,
-                sizePerPage,
-                totalSize,
-              })}
-              // pagination={ paginationFactory(options) }
-              onTableChange={onTableChange}
-              loading={loading}
-              overlay={overlayFactory({
-                spinner: (
-                  <div>
-                    <Loader />
-                  </div>
-                ),
-              })}
-              selectRow={selectRow}
-            />
-          </div>
-        </div>
+        </div>        
       </div>
+      <Box w={tableInstance.getTotalSize()}>
+          <table className="table table-striped" width={tableInstance.getTotalSize()}>
+            <thead>
+              {tableInstance.getHeaderGroups().map(headerGroup => 
+                <tr className="tr" key={headerGroup.id}>
+                  {headerGroup.headers.map(header => 
+                    <th className="th" scope="col" width={header.getSize()} key={header.id}>
+                      {header.column.columnDef.header}
+                    </th>
+                  )}
+                </tr>
+              )}
+            </thead>
+            <tbody>
+              {
+                tableInstance.getRowModel().rows.map(row =>
+                  <tr className="tr" key={row.id}>
+                    {row.getVisibleCells().map(cell => 
+                      <td className="td" width={cell.column.getSize()} key={cell.id}>
+                        {
+                          flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                            )
+                        }
+                      </td>
+                    )}
+                  </tr>
+                )
+              }
+            </tbody>
+          </table>
+        </Box>
     </div>
   );
 };

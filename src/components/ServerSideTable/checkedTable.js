@@ -1,10 +1,11 @@
-import BootstrapTable from "react-bootstrap-table-next";
+/* import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import overlayFactory from "react-bootstrap-table2-overlay";
+import overlayFactory from "react-bootstrap-table2-overlay"; */
 import { DebounceInput } from "react-debounce-input";
 import Loader from "../Loader";
 import "./style.scss";
-import { useState, } from "react";
+import { useState } from "react";
+import { Box } from "@chakra-ui/react";
 
 const CheckedTable = ({
   data,
@@ -65,7 +66,7 @@ const CheckedTable = ({
         </div>
         <div className="server-table row">
           <div className={`col-md-12 ${data.length === 0 ?"hide_pagination" : null}`}>
-            <BootstrapTable
+            <Box
               remote
               keyField="id"
               data={data}
@@ -75,23 +76,11 @@ const CheckedTable = ({
               headerWrapperClasses="thead-dark"
               bodyClasses="tableBody"
               wrapperClasses="table-responsive customScroll"
-              pagination={paginationFactory({
-                page,
-                sizePerPage,
-                totalSize,
-              })}
               //ref={refBtn}
               // resetSelectRow={resetSelectRow}
               // pagination={ paginationFactory(options) }
               onTableChange={onTableChange}
               loading={loading}
-              overlay={overlayFactory({
-                spinner: (
-                  <div>
-                    <Loader />
-                  </div>
-                ),
-              })}
               selectRow={selectRow}
             />
           </div>
