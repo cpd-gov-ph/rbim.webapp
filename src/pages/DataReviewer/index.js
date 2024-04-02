@@ -82,32 +82,32 @@ const DataReviewer = () => {
     //   }
     // },
     {
-      dataField: "first_name",
-      text: "Date Reviewer Name",
+      accessorKey: "first_name",
+      header: "Date Reviewer Name",
       headerStyle: { width: "15%", textAlign: "left" },
       style: { textAlign: "left" }
     },
     {
-      dataField: "barangay.first_name",
-      text: "Assigned Barangay Name",
+      accessorKey: "barangay.first_name",
+      header: "Assigned Barangay Name",
       headerStyle: { width: "20%", textAlign: "center" },
       style: { textAlign: "center" }
     },
     {
-      dataField: "profile.official_number",
-      text: "DR Code",
+      accessorKey: "profile.official_number",
+      header: "DR Code",
       headerStyle: { width: "17%", textAlign: "center" },
       style: { textAlign: "center" }
     },
     {
-      dataField: "email",
-      text: "Email ID",
+      accessorKey: "email",
+      header: "Email ID",
       headerStyle: { width: "16%", textAlign: "left" },
       style: { textAlign: "left" }
     },
     {
-      dataField: "action",
-      text: "Action",
+      accessorKey: "action",
+      header: "Action",
       headerStyle: { width: "16%", textAlign: "center" },
       formatter: actionButton,
     }

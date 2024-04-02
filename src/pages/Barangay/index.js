@@ -67,39 +67,39 @@ const Barangay = () => {
     //   style:{ textAlign: "left" }
     // },
     {
-      dataField: "first_name",
-      text: "Barangay Official Name",
+      accessorKey: "first_name",
+      header: "Barangay Official Name",
       headerStyle: { width: "15%", textAlign: "left" },
       style: { textAlign: "left" }
     },
     {
-      dataField: "location_info.name",
-      text: "Assigned Barangay",
+      accessorKey: "location_info.name",
+      header: "Assigned Barangay",
       headerStyle: { width: "15%", textAlign: "left" },
       style: { textAlign: "center" },
       //   formatter: PhoneNumber,
     },
     {
-      dataField: "profile.official_number",
-      text: "BO Code",
+      accessorKey: "profile.official_number",
+      header: "BO Code",
       headerStyle: { width: "20%", textAlign: "center" },
       style: { textAlign: "center" }
     },
     {
-      dataField: "email",
-      text: "BO Email ID",
+      accessorKey: "email",
+      header: "BO Email ID",
       headerStyle: { width: "29%", textAlign: "left" },
       style: { textAlign: "left" }
     },
     {
-      dataField: 'profile.phone_no',
-      text: "BO Mobile Number",
+      accessorKey: 'profile.phone_no',
+      header: "BO Mobile Number",
       headerStyle: { width: "25%", textAlign: "left" },
       style: { textAlign: "left" }
     },
     {
-      dataField: "action",
-      text: "Action",
+      accessorKey: "action",
+      header: "Action",
       formatter: actionButton,
     }
   ];

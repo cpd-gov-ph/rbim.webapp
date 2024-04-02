@@ -26,19 +26,16 @@ const SurveyQuestion = () => {
 
   const columns = [
     {
-      dataField: "sl.no",
-      text: "S.no",
-      formatter: (cell, row, rowIndex, formatExtraData) => {
-        return rowIndex + 1;
-      }
+      accessorKey: "position",
+      header: "S.no"
     },
     {
-      dataField: "category_name",
-      text: "Questions Subheading",
+      accessorKey: "category_name",
+      header: "Questions Subheading",
     },
     {
-      dataField: "action",
-      text: "Action",
+      accessorKey: "action",
+      header: "Action",
       headerStyle: { width: "15%", textAlign: "center" },
       formatter: actionButton,
       style: { textAlign: "center" },
@@ -48,11 +45,11 @@ const SurveyQuestion = () => {
   const getQuestionList = async () => {
     setLoading(true)
     const res = await getData("get-survey-master/", {});
+    console.log(res);
     if (res.status === 1) {
       setQuestionList(res.data);
       setLoading(false)
     }
-
   };
 
   useEffect(() => {
