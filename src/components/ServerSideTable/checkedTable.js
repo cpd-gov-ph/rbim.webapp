@@ -1,11 +1,7 @@
-/* import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import overlayFactory from "react-bootstrap-table2-overlay"; */
 import { DebounceInput } from "react-debounce-input";
 import Loader from "../Loader";
 import "./style.scss";
-import { useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { useState, } from "react";
 
 const CheckedTable = ({
   data,
@@ -66,23 +62,6 @@ const CheckedTable = ({
         </div>
         <div className="server-table row">
           <div className={`col-md-12 ${data.length === 0 ?"hide_pagination" : null}`}>
-            <Box
-              remote
-              keyField="id"
-              data={data}
-              columns={columns}
-              bordered={false}
-              noDataIndication={loading ? " " : "No surveys assigned"}
-              headerWrapperClasses="thead-dark"
-              bodyClasses="tableBody"
-              wrapperClasses="table-responsive customScroll"
-              //ref={refBtn}
-              // resetSelectRow={resetSelectRow}
-              // pagination={ paginationFactory(options) }
-              onTableChange={onTableChange}
-              loading={loading}
-              selectRow={selectRow}
-            />
           </div>
         </div>
       </div>

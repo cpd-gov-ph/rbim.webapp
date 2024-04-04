@@ -1,37 +1,34 @@
-/* import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import overlayFactory from "react-bootstrap-table2-overlay"; */
 import { DebounceInput } from "react-debounce-input";
-import Loader from "../Loader";
 import "./style.scss";
 import { useState } from "react";
-import { Box } from '@chakra-ui/react';
-import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { Box } from "@chakra-ui/react";
+import { flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
+import Loader from "../Loader";
+import { Pagination } from "./Pagination";
 
 const ServerSideTable = ({
   data,
   columns,
-  page,
-  sizePerPage,
-  totalSize,
-  onFilter,
-  loading,
   children,
-  selectRow,
-  noDataMessage
+  loading,
+  onPaginationChange,
+  pageCount,
+  pagination,
+  onFilter,
 }) => {
   const [searchValue, setSearchValue] = useState("");
-  const onTableChange = (type, { page, sizePerPage }) => {
-    onFilter(page, sizePerPage, "");
-  };
   const tableInstance = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    onPaginationChange,
+    state: { pagination },
+    pageCount,
   });
   const searchChange = (e) => {
     setSearchValue(e.target.value);
-    onFilter(1, sizePerPage, e.target.value);
+    onFilter(1, pagination.pageSize, e.target.value);
   };
 
   return (
@@ -70,7 +67,13 @@ const ServerSideTable = ({
               )}
             </thead>
             <tbody>
-              {
+              {loading ? (
+                  <tr>
+                  <td colspan="100%">
+                    <Loader />
+                  </td>
+                </tr>
+              ) : (
                 tableInstance.getRowModel().rows.map(row =>
                   <tr className="tr" key={row.id}>
                     {row.getVisibleCells().map(cell => 
@@ -85,10 +88,11 @@ const ServerSideTable = ({
                     )}
                   </tr>
                 )
-              }
+              )}
             </tbody>
           </table>
         </Box>
+        <Pagination tableLib={tableInstance}/>
     </div>
   );
 };

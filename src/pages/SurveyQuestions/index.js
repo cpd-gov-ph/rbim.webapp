@@ -45,7 +45,7 @@ const SurveyQuestion = () => {
   const getQuestionList = async () => {
     setLoading(true)
     const res = await getData("get-survey-master/", {});
-    console.log(res);
+    
     if (res.status === 1) {
       setQuestionList(res.data);
       setLoading(false)
