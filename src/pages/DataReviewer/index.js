@@ -3,12 +3,14 @@ import ServerSideTable from "../../components/ServerSideTable";
 import { postData, userRole } from "../../api";
 import Loader from "../../components/Loader";
 
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Add from "./Add";
+
+import { ActionButton } from "./actionButtons";
+import { usePagination } from "../../components/ServerSideTable/usePagination"
+
 const DataReviewer = () => {
   let navigate = useNavigate();
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizeperPage] = useState(10);
   const [totalSize, setTotalSize] = useState(0);
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,7 @@ const DataReviewer = () => {
   const [isEdit,setIsEdit]=useState(false);
   const addShowModalClose = () => {
     setModalOpen(false);
-    getReviewerList(page, sizePerPage, "");
+    getReviewerList(pagination.page, pagination.sizePerPage, "");
     setLoading(true);
   };
   //View data reviewer page
@@ -42,45 +44,8 @@ const DataReviewer = () => {
     setModalState("Add New Data Reviewer");
     setIsEdit(false)
   }
-  const actionButton = (cell, row) => {
-    return (
-      <>
-        <div>
-          {userRole().role == "superadmin" ? (
-            <div className="action-buttons">
-              <button className="btn btn-link me-3" onClick={() => EditClick(row)}>
-                <i className="fa fa-pencil"></i>
-              </button>
-              {/* <button className="btn btn-link me-3" onClick={() => DeleteClick(row)}>
-                <i className="fa fa-solid fa-trash"></i>
-              </button> */}
-              <button className="btn btn-link " onClick={() => ViewClick(row)}>
-                <i className="fa fa-eye" aria-hidden="true"></i>
-              </button>
-            </div>
-          ) : ''}
-          {userRole().role == "barangay" ? (
-            <div className="action-buttons">
-              <button className="btn btn-link " onClick={() => ViewClick(row)}>
-                <i className="fa fa-eye" aria-hidden="true"></i>
-              </button>
-            </div>
-          ) : ''}
-        </div>
-      </>
-    );
-  };
 
   const columns = [
-    // {
-    //   dataField: "sl.no",
-    //   text: "S.no",
-    //   headerStyle: { width: "8%", textAlign: "left" },
-    //   style:{ textAlign: "left" },
-    //   formatter: (cell, row, rowIndex, formatExtraData) => {
-    //     return ((page-1)*sizePerPage)+(rowIndex+1);
-    //   }
-    // },
     {
       accessorKey: "first_name",
       header: "Date Reviewer Name",
@@ -109,35 +74,39 @@ const DataReviewer = () => {
       accessorKey: "action",
       header: "Action",
       headerStyle: { width: "16%", textAlign: "center" },
-      formatter: actionButton,
+      formatter: (props) => ActionButton(
+        props.getValue().id,
+        props.getValue().row, 
+        EditClick, 
+        ViewClick, 
+        ),
     }
   ];
   const onFilter = (page, sizePerPage, search) => {
-    setPage(page);
-    setSizeperPage(sizePerPage);
     getReviewerList(page, sizePerPage, search);
   };
 
-  const getReviewerList = async (page, sizePerPage, search) => {
-    //setLoading(true);
-    let obj = {
-      page: page,
-      page_size: sizePerPage,
+  const { onPaginationChange, pagination } = usePagination();
+
+  const getReviewerList = async (search) => {
+    let params = {
+      page: pagination.pageIndex + 1,
+      page_size: pagination.pageSize,
       search: search
     };
     try {
-      const getData = await postData("list-data-reviewer/", {}, obj);
+      const getData = await postData("list-data-reviewer/", {}, params);
       if (getData && getData.status === 1) {
         setUserList(getData.data);
-        setTotalSize(getData.paginator.total_records);
+        setTotalSize(Math.ceil(getData.paginator.total_records / params.page_size));
         setLoading(false);
       }
     } catch (err) { }
   };
 
   useEffect(() => {
-    getReviewerList(page, sizePerPage, "");
-  }, []);
+    getReviewerList("");
+  });
 
   return (
     <>
@@ -146,17 +115,16 @@ const DataReviewer = () => {
           <div>
             <h4 className="page-title">Data Reviewer</h4>
             <ServerSideTable
-              columns={columns}
               data={userList}
-              page={page}
-              sizePerPage={sizePerPage}
-              totalSize={totalSize}
-              onFilter={onFilter}
+              columns={columns}
               loading={loading}
-              noDataMessage ='No user found'
+              onPaginationChange={onPaginationChange}
+              pageCount={totalSize}
+              pagination={pagination}
+              onFilter={onFilter}
             >
               <div className="action-group text-end">
-                {userRole().role == 'superadmin' ? (
+                {userRole().role === 'superadmin' ? (
                   <button
                     className="btn f-14 fw-600 btn-sm text-white btn-primary add-btn-width"
                     onClick={AddUserClick}

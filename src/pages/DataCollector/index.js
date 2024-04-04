@@ -81,7 +81,7 @@ const DataCollector = () => {
   ];
 
   const onFilter = (search) => {
-    getReviewerList(search);
+    getCollectorList(search);
   };
   const addClick = () => {
     setAddShowModal(true);
@@ -91,13 +91,12 @@ const DataCollector = () => {
   const addShowModalClose = () => {
     setAddShowModal(false);
     setLoading(true);
-    getReviewerList("");
+    getCollectorList("");
   };
 
-  const { limit, onPaginationChange, skip, pagination } = usePagination();
+  const { onPaginationChange, pagination } = usePagination();
 
-  const getReviewerList = async (search = "") => {
-    //setLoading(true);
+  const getCollectorList = async (search = "") => {
     let params = {
       page: pagination.pageIndex + 1,
       page_size: pagination.pageSize,
@@ -114,7 +113,7 @@ const DataCollector = () => {
   };
 
   useEffect(() => {
-    getReviewerList("");
+    getCollectorList("");
   });
 
   return (
