@@ -6,7 +6,12 @@ import { flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table
 import Loader from "../Loader";
 import { Pagination } from "./Pagination";
 
-const ServerSideTable = ({
+  /**
+   * code implementation sourced from: 
+   * https://medium.com/@aylo.srd/server-side-pagination-and-sorting-with-tanstack-table-and-react-bd493170125e
+   * https://www.youtube.com/watch?v=CjqG277Hmgg
+  */
+  const ServerSideTable = ({
   data,
   columns,
   children,
