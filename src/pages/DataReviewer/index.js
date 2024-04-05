@@ -106,7 +106,7 @@ const DataReviewer = () => {
 
   useEffect(() => {
     getReviewerList("");
-  });
+  }, []);
 
   return (
     <>

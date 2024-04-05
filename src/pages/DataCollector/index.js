@@ -114,8 +114,7 @@ const DataCollector = () => {
 
   useEffect(() => {
     getCollectorList("");
-  });
-
+  }, []);
   return (
     <>
       {!loading && (
