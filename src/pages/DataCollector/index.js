@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import ServerSideTable from "../../components/ServerSideTable";
 import { postData, userRole } from "../../api";
 import Add from "./Add";
@@ -96,7 +96,7 @@ const DataCollector = () => {
 
   const { onPaginationChange, pagination } = usePagination();
 
-  const getCollectorList = async (search = "") => {
+  const getCollectorList = useCallback(async(search="") => {
     let params = {
       page: pagination.pageIndex + 1,
       page_size: pagination.pageSize,
@@ -110,11 +110,11 @@ const DataCollector = () => {
         setLoading(false);
       }
     } catch (err) { }
-  };
+  }, [pagination]);
 
   useEffect(() => {
     getCollectorList("");
-  }, []);
+  }, [getCollectorList]);
   return (
     <>
       {!loading && (
