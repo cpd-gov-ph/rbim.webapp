@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Col, Row } from 'react-bootstrap';
-// import './dataCollector.scss';
 import { useParams } from "react-router-dom";
 import { getData } from '../../api';
 import Loader from "../../components/Loader";
@@ -14,7 +12,7 @@ function ViewData() {
     const GetViewDetails = async () => {
         setInitLoading(true);
         const res = await getData("view-data-collector/" + id + "/", {});
-        if (res.status == 1) {
+        if (res.status === 1) {
             res.data.profile.dob = moment(res.data.profile.dob).format("DD-MM-YYYY");
             setViewDetails(res.data);
             setInitLoading(false);
@@ -26,12 +24,12 @@ function ViewData() {
         GetViewDetails();
     }, []);
     return (
-        <>
+        <div>
             {!initLoading && (
                 <div className='view-details'>
                     <div className='view-details-section'>
                         <div className='view-heading'>
-                            <h3>View Data Collector Details</h3>
+                            <h3>View Data Collector Details 123</h3>
                         </div>
                         <div className='view-body'>
                             <div className='d-flex justify-content-between'>
@@ -50,14 +48,6 @@ function ViewData() {
                                     <p>{ViewDetails?.profile?.dob}</p>
                                 </div>
                             </div>
-                            {/* <div className='d-flex justify-content-between'>
-                        <div className='view-left'>
-                            <p>Age</p>
-                        </div>
-                        <div className='view-right'>
-                            <p>{ViewDetails?.profile?.age}</p>
-                        </div>
-                    </div> */}
                             <div className='d-flex justify-content-between'>
                                 <div className='view-left'>
                                     <p>Sex at birth</p>
@@ -114,29 +104,12 @@ function ViewData() {
                                     <p>{ViewDetails?.data_reviewer?.first_name}</p>
                                 </div>
                             </div>
-
-                            {/* <div className='d-flex justify-content-between'>
-                    <div className='view-left'>
-                        <p>Reviewer ID</p>
-                    </div>
-                    <div className='view-right'>
-                        <p>{ViewDetails?.profile?.official_number}</p>
-                    </div>
-                </div>
-                <div className='d-flex justify-content-between'>
-                    <div className='view-left'>
-                        <p>Address</p>
-                    </div>
-                    <div className='view-right address-view'>
-                        <p>{ViewDetails?.profile?.address}</p>
-                    </div>
-                </div> */}
                         </div>
                     </div>
                 </div>
             )}
             {initLoading && <Loader />}
-        </>
+        </div>
     );
 }
 
