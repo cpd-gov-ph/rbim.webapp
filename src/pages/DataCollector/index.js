@@ -114,9 +114,8 @@ const DataCollector = () => {
     getCollectorList("");
   }, [getCollectorList]);
   return (
-    <>
+    <div>
       {!loading && (
-        <>
           <div>
             <h4 className="page-title">Data Collector</h4>
             <ServerSideTable
@@ -141,10 +140,9 @@ const DataCollector = () => {
             </ServerSideTable>
             {addShowModal && <Add header={modalState} is_edit={isEdit} selectedRow={selectedRow} show={addShowModal} onClose={addShowModalClose} />}
           </div>
-        </>
       )}
       {loading && <Loader className="baranLoader" />}
-    </>
+    </div>
   );
 };
 

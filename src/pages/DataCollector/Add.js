@@ -73,7 +73,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
       getSelectionReviewer(selectedRow.data_reviewer)
       setFormInputs(selectedRow);
     }
-  }, []);
+  }, [selectedRow]);
 
   const getSelectionBarangay = (obj) => {
     let data = Array(obj)
