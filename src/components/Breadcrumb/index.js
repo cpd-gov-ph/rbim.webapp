@@ -1,6 +1,6 @@
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import "./style.scss"
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
 const PageBreadcrumb = ({ breadcrumb_lists, icon }) => {
@@ -9,7 +9,7 @@ const PageBreadcrumb = ({ breadcrumb_lists, icon }) => {
 
       {breadcrumb_lists.map(function (val, key) {
         return (
-          <div className='bread-item'>
+          <div className='bread-item' key={key}>
             {key !== 0 ?
               <div className='bread-slash'>/</div> : null
             }
@@ -19,7 +19,7 @@ const PageBreadcrumb = ({ breadcrumb_lists, icon }) => {
               </h4>
               :
               <h4 className="page-title">
-                <NavLink activeClassName="selected" to={val.link} className="primary-color"> {icon && <span className='bread-icon me-2'><FaArrowLeft /></span>} {val.heading}</NavLink>
+                <NavLink activeclassname="selected" to={val.link} className="primary-color"> {icon && <span className='bread-icon me-2'><FaArrowLeft /></span>} {val.heading}</NavLink>
               </h4>
             }
           </div>
