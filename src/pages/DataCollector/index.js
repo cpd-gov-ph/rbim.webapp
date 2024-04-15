@@ -68,11 +68,9 @@ const DataCollector = () => {
     {
       accessorKey: "action",
       header: "Action",
-      cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "16%", textAlign: "center" },
-      formatter: (props) => ActionButton(
-        props.getValue().id,
-        props.getValue().row, 
+      cell: (props) => ActionButton(
+        props.row.original, 
         EditClick, 
         ViewClick, 
         ViewTaskClick

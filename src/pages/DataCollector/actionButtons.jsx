@@ -1,8 +1,7 @@
 import { userRole } from "../../api";
 
-export const ActionButton = (cell, row, editAction, ViewAction, ViewTaskAction) => {
+export const ActionButton = (row, editAction, ViewAction, ViewTaskAction) => {
     return (
-      <>
         <div >
           {userRole().role === "superadmin" ? (
             <div className="action-buttons">
@@ -28,6 +27,6 @@ export const ActionButton = (cell, row, editAction, ViewAction, ViewTaskAction) 
             </div>
           ) : ''}
         </div>
-      </>
+
     );
   };
