@@ -4,14 +4,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../../components/Form/Button";
 import FormModal from "../../components/FormModal";
-import Input from "../../components/Form/Input";
 import { Form } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { getData, postData, putData } from "../../api";
 import { toast } from "react-toastify";
 import InputGroup from 'react-bootstrap/InputGroup';
-import { emailRegx, onlyCharacter, phoneNumberRegx, requiredField } from "../../api/regex";
+import { emailRegx, onlyCharacter, requiredField } from "../../api/regex";
 import Select from "react-select";
 
 const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
@@ -86,7 +85,6 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
     getBarangayList();
     if (header === "Edit Data Reviewer Details") {
       selectedRow.profile.dob = moment(selectedRow.profile.dob).toDate();
-      console.log(selectedRow.barangay)
       getSelection(selectedRow.barangay)
       setFormInputs(selectedRow);
     }
@@ -95,7 +93,6 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   const getSelection = (obj) => {
     let data = Array(obj)
     let finalArr = [];
-    console.log(data)
     if (data && data?.length > 0) {
       data?.forEach((item) => {
         finalArr.push({
@@ -259,7 +256,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               <Form.Label column sm={4} className="required">
                 Data reviewer name
               </Form.Label>
-              <Col column sm={8}>
+              <Col column="sm" sm={8}>
                 <Form.Control
                   type="text"
                   name="first_name"
@@ -278,7 +275,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               <Form.Label column sm={4} className="required">
                 Date of birth
               </Form.Label>
-              <Col column sm={8} className="position-relative">
+              <Col column="sm" sm={8} className="position-relative">
                 <DatePicker
                   ref={focusDate}
                   className="datepicker-add-barangay"
@@ -309,7 +306,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               <Form.Label column sm={4} className="required">
                 Sex at birth
               </Form.Label>
-              <Col column sm={8}>
+              <Col column="sm" sm={8}>
                 {/* <Form.Control type="text" name="reset_code" 
                 required   onChange={handleInput}/> */}
                 <Form.Select
@@ -332,7 +329,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               <Form.Label column sm={4} className="required">
                 Mobile number
               </Form.Label>
-              <Col column sm={8}>
+              <Col column="sm" sm={8}>
                 <InputGroup className="phone-group">
                   <InputGroup.Text>
                     +63
@@ -361,7 +358,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               <Form.Label column sm={4} className="required">
                 Email ID
               </Form.Label>
-              <Col column sm={8}>
+              <Col column="sm" sm={8}>
                 <Form.Control
                   type="text"
                   name="email"
@@ -380,7 +377,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               <Form.Label column sm={4} className="required">
                 Address
               </Form.Label>
-              <Col column sm={8}>
+              <Col column="sm" sm={8}>
                 <Form.Control
                   as="textarea"
                   name="address"
@@ -397,7 +394,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               <Form.Label column sm={4} className="required">
                 Assigned barangay
               </Form.Label>
-              <Col column sm={8}>
+              <Col column="sm" sm={8}>
                 <Select
                   closeMenuOnSelect={true}
                   hideSelectedOptions={false}
@@ -417,7 +414,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               <Form.Label column sm={4} className="required">
                 DR code
               </Form.Label>
-              <Col column sm={8}>
+              <Col column="sm" sm={8}>
                 <Form.Control
                   type="text"
                   name="official_number"

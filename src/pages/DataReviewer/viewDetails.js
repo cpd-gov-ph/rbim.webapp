@@ -14,7 +14,7 @@ function ViewData() {
     const GetViewDetails = async () => {
         setInitLoading(true);
         const res = await getData("view-data-reviewer/" + id + "/", {});
-        if (res.status == 1) {
+        if (res.status === 1) {
             res.data.profile.dob = moment(res.data.profile.dob).format("DD-MM-YYYY");
             setViewDetails(res.data);
             setInitLoading(false);
@@ -102,32 +102,6 @@ function ViewData() {
                         </div>
                     </div>
                 </div>
-                // <Accordion defaultActiveKey={['0']} alwaysOpen>
-                //   <Accordion.Item eventKey="0">
-                //     <Accordion.Header>View Details</Accordion.Header>
-                //     <Accordion.Body>
-                //      <div className='basic-div'>
-                //       <div className='basic-div-left'>
-                //       {Object.entries(basic).map(item => {
-                //        return(
-                //           <div className='basic-item'>
-                //             <div className='basic-key'>{item[0]}</div>
-                //             <div className='basic-value'>{item[1]}</div>
-
-                //           </div>
-                //         )
-                //       })}
-                //       </div>
-                //      </div>
-                //     </Accordion.Body>
-                //   </Accordion.Item>
-                //   <Accordion.Item eventKey="1">
-                //     <Accordion.Header>Survey Details</Accordion.Header>
-                //     <Accordion.Body>
-                //      {/* <ResponsiveBreakpoints/> */}
-                //     </Accordion.Body>
-                //   </Accordion.Item>
-                // </Accordion>
             )}
             {initLoading && <Loader />}
         </>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import ServerSideTable from "../../components/ServerSideTable";
 import { postData, userRole } from "../../api";
 import Loader from "../../components/Loader";
@@ -74,21 +74,20 @@ const DataReviewer = () => {
       accessorKey: "action",
       header: "Action",
       headerStyle: { width: "16%", textAlign: "center" },
-      formatter: (props) => ActionButton(
-        props.getValue().id,
-        props.getValue().row, 
+      cell: (props) => ActionButton(
+        props.row.original,
         EditClick, 
         ViewClick, 
         ),
     }
   ];
-  const onFilter = (page, sizePerPage, search) => {
-    getReviewerList(page, sizePerPage, search);
+  const onFilter = (search) => {
+    getReviewerList(search);
   };
 
   const { onPaginationChange, pagination } = usePagination();
 
-  const getReviewerList = async (search) => {
+  const getReviewerList = useCallback(async(search="") => {
     let params = {
       page: pagination.pageIndex + 1,
       page_size: pagination.pageSize,
@@ -102,16 +101,15 @@ const DataReviewer = () => {
         setLoading(false);
       }
     } catch (err) { }
-  };
+  }, [pagination]);
 
   useEffect(() => {
     getReviewerList("");
-  }, []);
+  }, [getReviewerList]);
 
   return (
-    <>
+    <div>
       {!loading && (
-        <>
           <div>
             <h4 className="page-title">Data Reviewer</h4>
             <ServerSideTable
@@ -134,16 +132,12 @@ const DataReviewer = () => {
                 ) : ''}
               </div>
             </ServerSideTable>
-
             {modelOpen && <Add header={modalState} is_edit={isEdit} selectedRow={selectedRow} show={modelOpen} onClose={addShowModalClose} />}
-
-
           </div>
-        </>
       )}
 
       {loading && <Loader className="baranLoader" />}
-    </>
+    </div>
   );
 };
 
