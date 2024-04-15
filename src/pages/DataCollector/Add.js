@@ -10,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getData, postData, putData } from "../../api";
 import { toast } from "react-toastify";
 import InputGroup from 'react-bootstrap/InputGroup';
-import { emailRegx, onlyCharacter, phoneNumberRegx, requiredField } from "../../api/regex";
+import { emailRegx, onlyCharacter, requiredField } from "../../api/regex";
 import { FiInfo } from "react-icons/fi";
 import Select from "react-select";
 
@@ -115,7 +115,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   // get barangay list function
   const getBarangayNamelist = async () => {
     const res = await getData("barangay-name-List/", {});
-    if (res.status == 1) {
+    if (res.status === 1) {
       setbarangayList(res.data);
     } else {
       setbarangayList([]);
@@ -125,7 +125,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   // get data reviewer list function
   const getDataReviewerNamelist = async (id) => {
     const res = await getData("data-reviewer-name-list/" + id + '/', {});
-    if (res.status == 1) {
+    if (res.status === 1) {
       setdataReviewerList(res.data);
     } else {
       setdataReviewerList([]);
@@ -286,14 +286,14 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   }
 
   return (
-    <>
+    <div>
       <FormModal heading={header} show={show} onClose={onClose} size="lg">
         <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="off">
           <div className="row">
             <div className="col-md-12">
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">Data collector name</Form.Label>
-                <Col column sm={8}>
+                <Col column="sm" sm={8}>
                   <Form.Control
                     type="text"
                     name="first_name"
@@ -308,7 +308,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               </Form.Group>
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">Date of birth</Form.Label>
-                <Col column sm={8} className="position-relative">
+                <Col column="sm" sm={8} className="position-relative">
                   {/* <span className="calendar-icon">
                   <i className="fa fa-calendar" aria-hidden="true"></i>
                 </span> */}
@@ -339,7 +339,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               </Form.Group>
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">Sex at birth</Form.Label>
-                <Col column sm={8}>
+                <Col column="sm" sm={8}>
                   {/* <Form.Control type="text" name="reset_code" 
                 required   onChange={handleInput}/> */}
                   <Form.Select
@@ -358,7 +358,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               </Form.Group>
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">Mobile number</Form.Label>
-                <Col column sm={8}>
+                <Col column="sm" sm={8}>
                   <InputGroup className="phone-group">
                     <InputGroup.Text>
                       +63
@@ -383,7 +383,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               </Form.Group>
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">Email ID</Form.Label>
-                <Col column sm={8}>
+                <Col column="sm" sm={8}>
                   <Form.Control type="text"
                     name="email"
                     value={formInputs.email}
@@ -397,7 +397,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               </Form.Group>
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">Address</Form.Label>
-                <Col column sm={8}>
+                <Col column="sm" sm={8}>
                   <Form.Control as="textarea"
                     name="address"
                     required
@@ -410,7 +410,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               </Form.Group>
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">Assign barangay official</Form.Label>
-                <Col column sm={8}>
+                <Col column="sm" sm={8}>
                   <Select
                     closeMenuOnSelect={true}
                     hideSelectedOptions={false}
@@ -421,19 +421,19 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                     isDisabled={is_edit}
                   />
                   {
-                    validated && formInputs?.barangay_id == '' &&
+                    validated && formInputs?.barangay_id === '' &&
                     <div className="err-feedback"> {requiredField}</div>
                   }
-                  <p className="barangay-info">
+                  <div className="barangay-info">
                     <div> <FiInfo className="me-1" />
                       You can access a data reviewer list only after selecting the barangay official
                     </div>
-                  </p>
+                  </div>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required"> Assign data reviewer</Form.Label>
-                <Col column sm={8}>
+                <Col column="sm" sm={8}>
                   <Select
                     closeMenuOnSelect={true}
                     hideSelectedOptions={false}
@@ -444,14 +444,14 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                     isDisabled={formInputs.barangay_id ? false : true}
                   />
                   {
-                    validated && formInputs?.data_reviewer_id == '' &&
+                    validated && formInputs?.data_reviewer_id === '' &&
                     <div className="err-feedback"> {errorObject?.data_reviewer_id}</div>
                   }
                 </Col>
               </Form.Group>
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">DC code</Form.Label>
-                <Col column sm={8}>
+                <Col column="sm" sm={8}>
                   <Form.Control type="text"
                     name="official_number"
                     required
@@ -480,13 +480,13 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 loading={loading}
                 className="btn-primary button-width text-white"
               >
-                {header == "Edit Data Collector Details" ? "Update" : "Add"}
+                {header === "Edit Data Collector Details" ? "Update" : "Add"}
               </Button>
             </div>
           </div>
         </Form>
       </FormModal>
-    </>
+    </div>
   );
 };
 
