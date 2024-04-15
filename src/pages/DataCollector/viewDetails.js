@@ -29,7 +29,7 @@ function ViewData() {
                 <div className='view-details'>
                     <div className='view-details-section'>
                         <div className='view-heading'>
-                            <h3>View Data Collector Details 123</h3>
+                            <h3>View Data Collector Details</h3>
                         </div>
                         <div className='view-body'>
                             <div className='d-flex justify-content-between'>
