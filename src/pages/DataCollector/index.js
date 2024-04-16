@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
-import ServerSideTable from "../../components/ServerSideTable";
+import { useNavigate } from "react-router-dom";
 import { postData, userRole } from "../../api";
 import Add from "./Add";
-import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
+import ServerSideTable from "../../components/ServerSideTable";
 import { usePagination } from "../../components/ServerSideTable/usePagination"
 import { ActionButton } from "../../components/ServerSideTable/actionButtons"
 
@@ -114,6 +114,7 @@ const DataCollector = () => {
   useEffect(() => {
     getCollectorList("");
   }, [getCollectorList]);
+  
   return (
     <div>
       {!loading && (

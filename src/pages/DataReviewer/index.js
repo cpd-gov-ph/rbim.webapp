@@ -1,11 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
-import ServerSideTable from "../../components/ServerSideTable";
-import { postData, userRole } from "../../api";
-import Loader from "../../components/Loader";
-
 import { useNavigate } from "react-router-dom";
+import { postData, userRole } from "../../api";
 import Add from "./Add";
-
+import Loader from "../../components/Loader";
+import ServerSideTable from "../../components/ServerSideTable";
 import { ActionButton } from "../../components/ServerSideTable/actionButtons";
 import { usePagination } from "../../components/ServerSideTable/usePagination";
 
