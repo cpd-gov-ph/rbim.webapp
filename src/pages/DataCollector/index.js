@@ -5,7 +5,7 @@ import Add from "./Add";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
 import { usePagination } from "../../components/ServerSideTable/usePagination"
-import { ActionButton } from "./actionButtons";
+import { ActionButton } from "../../components/ServerSideTable/actionButtons"
 
 const DataCollector = () => {
   let navigate = useNavigate();
@@ -18,11 +18,11 @@ const DataCollector = () => {
   const [isEdit,setIsEdit]=useState(false);
 
   //View data collector page
-  const ViewClick = (row) => {
+  const viewClick = (row) => {
     navigate("/data-collector/view/" + row.id);
   };
   // edit data collector
-  const EditClick = (row) => {
+  const editClick = (row) => {
     setModalState("Edit Data Collector Details");
     setSelectedRow(row)
     setAddShowModal(true);
@@ -33,7 +33,7 @@ const DataCollector = () => {
   //   console.log(row)
   // };
   // view data collector task
-  const ViewTaskClick = (row) => {
+  const viewTaskClick = (row) => {
     navigate("/data-collector/viewtask/" + row.id);
   }
   const columns = [
@@ -71,9 +71,10 @@ const DataCollector = () => {
       headerStyle: { width: "16%", textAlign: "center" },
       cell: (props) => ActionButton(
         props.row.original, 
-        EditClick, 
-        ViewClick, 
-        ViewTaskClick
+        editClick, 
+        viewClick,
+        null,
+        viewTaskClick
         ),
     }
   ];

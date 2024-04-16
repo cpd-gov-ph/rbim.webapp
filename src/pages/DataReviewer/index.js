@@ -6,8 +6,8 @@ import Loader from "../../components/Loader";
 import { useNavigate } from "react-router-dom";
 import Add from "./Add";
 
-import { ActionButton } from "./actionButtons";
-import { usePagination } from "../../components/ServerSideTable/usePagination"
+import { ActionButton } from "../../components/ServerSideTable/actionButtons";
+import { usePagination } from "../../components/ServerSideTable/usePagination";
 
 const DataReviewer = () => {
   let navigate = useNavigate();
@@ -24,12 +24,12 @@ const DataReviewer = () => {
     setLoading(true);
   };
   //View data reviewer page
-  const ViewClick = (row) => {
+  const viewClick = (row) => {
     
     navigate("/data-reviewer/view/" + row.id);
   };
   // edit data reviewer
-  const EditClick = (row) => {
+  const editClick = (row) => {
     setModalOpen(true);
     setModalState("Edit Data Reviewer Details");
     setSelectedRow(row);
@@ -39,7 +39,7 @@ const DataReviewer = () => {
   // const DeleteClick = (row) => {
   //   console.log(row)
   // };
-  const AddUserClick = () => {
+  const addUserClick = () => {
     setModalOpen(true);
     setModalState("Add New Data Reviewer");
     setIsEdit(false)
@@ -76,8 +76,10 @@ const DataReviewer = () => {
       headerStyle: { width: "16%", textAlign: "center" },
       cell: (props) => ActionButton(
         props.row.original,
-        EditClick, 
-        ViewClick, 
+        editClick, 
+        viewClick,
+        null,
+        null
         ),
     }
   ];
@@ -125,7 +127,7 @@ const DataReviewer = () => {
                 {userRole().role === 'superadmin' ? (
                   <button
                     className="btn f-14 fw-600 btn-sm text-white btn-primary add-btn-width"
-                    onClick={AddUserClick}
+                    onClick={addUserClick}
                   >
                     Add
                   </button>
