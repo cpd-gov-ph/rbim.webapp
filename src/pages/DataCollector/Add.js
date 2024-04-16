@@ -1,20 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import moment from "moment";
-import Button from "../../components/Form/Button";
-import FormModal from "../../components/FormModal";
 import { Form } from "react-bootstrap";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { getData, postData, putData } from "../../api";
 import { toast } from "react-toastify";
 import InputGroup from 'react-bootstrap/InputGroup';
-import { emailRegx, onlyCharacter, requiredField } from "../../api/regex";
 import { FiInfo } from "react-icons/fi";
 import Select from "react-select";
 
-const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
+import { getData, postData, putData, userRole } from "../../api";
+import { emailRegx, onlyCharacter, requiredField } from "../../api/regex";
+import Button from "../../components/Form/Button";
+import FormModal from "../../components/FormModal";
+
+const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
   const [loading, setLoading] = useState(false);
   const [addObject, setAddObject] = useState({});
   const [validated, setValidated] = useState(false);
@@ -64,73 +65,85 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
       },
     }));
   };
+
   //Get barangay list
   useEffect(() => {
+  // get data reviewer list function
+    const getDataReviewerNamelist = async (id) => {
+      setdataReviewerList([]);
+      let url = "data-reviewer-name-list/" + id + '/';
+      if (userRole().role === 'superadmin') {
+        url = "data-reviewer-name-list/-1/"
+      }
+      const res = await getData(url, {});
+      console.log(res);
+      if (res.status === 1) {
+        setdataReviewerList(formatSelectOptions(res.data));
+      }
+    };
+
+      // get barangay list function
+    const getBarangayNamelist = async () => {
+      setbarangayList([]);
+      let res = await getData("barangay-name-List/", {});
+      if (res.status === 1) {
+        setbarangayList(formatSelectOptions(res.data));
+      } 
+    };
+
+    const getSelectionBarangay = (obj) => {
+      let data = Array(obj)
+      let finalArr = [];
+      if (data && data.length > 0) {
+        let counter = 0;
+        data.forEach((item) => {
+          finalArr.push({
+            value: item.id ? item.id : counter++,
+            label: item.first_name ? item.first_name : '',
+            name: item.first_name ? item.first_name : '',
+          });
+        });
+      }
+      setBarangayValue(finalArr);
+    };
+
+    const getSelectionReviewer = (obj) => {
+      let data = Array(obj)
+      let finalArr = [];
+      if (data && data.length > 0) {
+        let counter = 0;
+        data.forEach((item) => {
+          finalArr.push({
+            value: item.id ? item.id : counter++,
+            label: item.first_name ? item.first_name : '',
+            name: item.first_name ? item.first_name : '',
+          });
+        });
+      }
+      setDataReviewerValue(finalArr)
+    };
+
     getBarangayNamelist();
+    
     if (header === "Edit Data Collector Details") {
       selectedRow.profile.dob = moment(selectedRow.profile.dob).toDate();
       getSelectionBarangay(selectedRow.barangay)
       getSelectionReviewer(selectedRow.data_reviewer)
       setFormInputs(selectedRow);
     }
-  }, [selectedRow]);
 
-  const getSelectionBarangay = (obj) => {
-    let data = Array(obj)
-    let finalArr = [];
-    if (data && data.length > 0) {
-      data.forEach((item) => {
-        finalArr.push({
-          value: item.id ? item.id : item.id,
-          label: item.first_name ? item.first_name : item.first_name,
-          name: item.first_name ? item.first_name : item.first_name,
-        });
-      });
-    }
-    setBarangayValue(finalArr)
-  }
-
-  const getSelectionReviewer = (obj) => {
-    let data = Array(obj)
-    let finalArr = [];
-    if (data && data.length > 0) {
-      data.forEach((item) => {
-        finalArr.push({
-          value: item.id ? item.id : item.id,
-          label: item.first_name ? item.first_name : item.first_name,
-          name: item.first_name ? item.first_name : item.first_name,
-        });
-      });
-    }
-    setDataReviewerValue(finalArr)
-  }
-
-  // get data reviewer list
-  useEffect(() => {
+    console.log("inputs");
+    console.log(formInputs.barangay_id);
     if (formInputs.barangay_id) {
       getDataReviewerNamelist(formInputs.barangay_id);
     }
-  }, [formInputs.barangay_id]);
+  }, [
+    header,
+    selectedRow,
+    formInputs.barangay_id,
+    ]
+  );
 
-  // get barangay list function
-  const getBarangayNamelist = async () => {
-    const res = await getData("barangay-name-List/", {});
-    if (res.status === 1) {
-      setbarangayList(res.data);
-    } else {
-      setbarangayList([]);
-    }
-  }
-
-  // get data reviewer list function
-  const getDataReviewerNamelist = async (id) => {
-    const res = await getData("data-reviewer-name-list/" + id + '/', {});
-    if (res.status === 1) {
-      setdataReviewerList(res.data);
-    } else {
-      setdataReviewerList([]);
-    }
-  }
   // Form validation function
   const checkValidate = (formInputs) => {
     let errors = {}
@@ -232,14 +245,17 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   const formatSelectOptions = (data) => {
     let finalArr = [];
     if (data && data.length > 0) {
+      var counter = 0;
       data.forEach((item) => {
         finalArr.push({
-          value: item.id ? item.id : item.id,
-          label: item.first_name ? item.first_name : item.first_name,
-          name: item.first_name ? item.first_name : item.first_name,
+          value: item.id ? item.id : counter++,
+          label: item.first_name ? item.first_name : '',
+          name: item.first_name ? item.first_name : '',
         });
       });
     }
+    console.log("rendering array");
+    console.log(finalArr);
     return finalArr;
   };
 
@@ -262,6 +278,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
       data_reviewer_id: data.value
     }));
   }
+
   const getOfficialNumber=async(barangay_id)=>{
     const data={
       "municipality":'',
@@ -369,10 +386,6 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                       required
                       isInvalid={!!errorObject.phone_no}
                       onChange={(e) => {
-                        if (e.target.value.length > 10) {
-                          // errorObject.phoneNumber = "You are trying enter more than 10 numbers"
-                          return false
-                        }
                         handleProfile(e, e.target.value, "phone_no")
                       }} />
                     <Form.Control.Feedback type="invalid">
@@ -414,11 +427,11 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                   <Select
                     closeMenuOnSelect={true}
                     hideSelectedOptions={false}
-                    options={formatSelectOptions(barangayList)}
+                    options={barangayList}
                     onChange={(selectedOption) => handleBarangayOnChange(selectedOption)}
                     value={barangayValue}
                     placeholder="Select "
-                    isDisabled={is_edit}
+                    
                   />
                   {
                     validated && formInputs?.barangay_id === '' &&
@@ -437,7 +450,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                   <Select
                     closeMenuOnSelect={true}
                     hideSelectedOptions={false}
-                    options={formatSelectOptions(dataReviewerList)}
+                    options={dataReviewerList}
                     onChange={(selectedOption) => handleReviewerOnChange(selectedOption)}
                     value={dataReviewerValue}
                     placeholder="Select "
