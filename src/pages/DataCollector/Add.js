@@ -76,7 +76,6 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
         url = "data-reviewer-name-list/-1/"
       }
       const res = await getData(url, {});
-      console.log(res);
       if (res.status === 1) {
         setdataReviewerList(formatSelectOptions(res.data));
       }
@@ -132,8 +131,6 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
       setFormInputs(selectedRow);
     }
 
-    console.log("inputs");
-    console.log(formInputs.barangay_id);
     if (formInputs.barangay_id) {
       getDataReviewerNamelist(formInputs.barangay_id);
     }
@@ -254,8 +251,6 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
         });
       });
     }
-    console.log("rendering array");
-    console.log(finalArr);
     return finalArr;
   };
 
