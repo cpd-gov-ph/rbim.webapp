@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import "./style.scss";
+import { postData } from "../../api";
+import Add from "./Add";
+import Loader from "../../components/Loader";
 import Button from "../../components/Form/Button";
 import ServerSideTable from "../../components/ServerSideTable";
-import Add from "./Add";
-import { postData } from "../../api";
-import "./style.scss";
-import Loader from "../../components/Loader";
-import { NavLink, useNavigate } from "react-router-dom";
+import { usePagination } from "../../components/ServerSideTable/usePagination"
+import { ActionButton } from "../../components/ServerSideTable/actionButtons"
+
 const Barangay = () => {
   let navigate = useNavigate();
   const [addShowModal, setAddShowModal] = useState(false);
@@ -24,38 +27,18 @@ const Barangay = () => {
     setModalState("Add New Barangay Official")
   };
   //View barangay page
-  const ViewClick = (row) => {
+  const viewClick = (row) => {
     navigate("/barangay/view/" + row.id);
   };
   // edit barangay
-  const EditClick = (row) => {
+  const editClick = (row) => {
     setSelectedRow(row)
     setAddShowModal(true);
     setIsEdit(true)
     setModalState("Edit Barangay Official Details")
 
   };
-  // delete barangay
-  // const DeleteClick=(row)=>{
-  //   console.log(row)
-  // };
-  const actionButton = (cell, row) => {
-    return (
-      <>
-        <div className="action-buttons">
-          <button className="btn btn-link me-3" onClick={() => EditClick(row)}>
-            <i className="fa fa-pencil"></i>
-          </button>
-          {/* <button className="btn btn-link me-3"  onClick={() => DeleteClick(row)}>
-          <i className="fa fa-solid fa-trash"></i>
-          </button> */}
-          <button className="btn btn-link " onClick={() => ViewClick(row)}>
-            <i className="fa fa-eye" aria-hidden="true"></i>
-          </button>
-        </div>
-      </>
-    );
-  };
+
   const columns = [
     // {
     //   dataField: "sl.no",
@@ -100,25 +83,34 @@ const Barangay = () => {
     {
       accessorKey: "action",
       header: "Action",
-      formatter: actionButton,
+      cell: (props) => ActionButton(
+        props.row.original, 
+        editClick, 
+        viewClick,
+        null,
+        null
+        ),
     }
   ];
-  const getBarangayList = async (page, sizePerPage, search) => {
- 
-    let obj = {
-      page: page,
-      page_size: sizePerPage,
+
+  const { onPaginationChange, pagination } = usePagination();
+
+  const getBarangayList = useCallback(async(search="") => {
+    let params = {
+      page: pagination.pageIndex + 1,
+      page_size: pagination.pageSize,
       search: search
     };
     try {
-      const getData = await postData("list-barangay/", {}, obj);
+      const getData = await postData("list-barangay/", {}, params);
       if (getData && getData.status === 1) {
         setUserList(getData.data);
-        setTotalSize(getData.paginator.total_records);
+        setTotalSize(Math.ceil(getData.paginator.total_records / params.page_size));
         setLoading(false);
       }
     } catch (err) { }
-  };
+  }, [pagination]);
+
   const onFilter = (page, sizePerPage, search) => {
     setPage(page);
     setSizeperPage(sizePerPage);
@@ -130,23 +122,23 @@ const Barangay = () => {
     //setLoading(true);
   };
   useEffect(() => {
-    getBarangayList(page, sizePerPage, "");
-  }, []);
+    getBarangayList("");
+  }, [getBarangayList]);
+
   return (
     <React.Fragment>
       {!loading && (
-        <>
+        <div>
           <div>
             <h4 className="page-title"> Barangay Officials </h4>
             <ServerSideTable
-              columns={columns}
               data={userList}
-              page={page}
-              sizePerPage={sizePerPage}
-              totalSize={totalSize}
-              onFilter={onFilter}
+              columns={columns}
               loading={loading}
-              noDataMessage ='No user found'
+              onPaginationChange={onPaginationChange}
+              pageCount={totalSize}
+              pagination={pagination}
+              onFilter={onFilter}
             >
               <div className="action-group text-end">
 
@@ -166,7 +158,7 @@ const Barangay = () => {
             </ServerSideTable>
           </div>
           {addShowModal && <Add header={modalState} is_edit={isEdit} selectedRow={selectedRow} show={addShowModal} onClose={addShowModalClose} />}
-        </>
+        </div>
       )}
 
       {loading && <Loader className="baranLoader"/> }
