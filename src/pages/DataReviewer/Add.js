@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import InputGroup from 'react-bootstrap/InputGroup';
+import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../../components/Form/Button";
 import FormModal from "../../components/FormModal";
 import { Form } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { getData, postData, putData } from "../../api";
 import { toast } from "react-toastify";
-import InputGroup from 'react-bootstrap/InputGroup';
+import { getData, postData, putData, userRole } from "../../api";
 import { emailRegx, onlyCharacter, requiredField } from "../../api/regex";
-import Select from "react-select";
 
-const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
+const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
   const [loading, setLoading] = useState(false);
   const [formInputs, setFormInputs] = useState({
     email: "",
@@ -27,7 +27,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
       gender: "",
     },
   });
-  const [date, setDate] = useState("");
+
   const [validated, setValidated] = useState(false);
   const [barangayList, setBarangayList] = useState([]);
   const [errorObject, setErrorObject] = useState({});
@@ -71,24 +71,23 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
     }
   };
 
-  const getBarangayList = async (id) => {
-    const getBarangay = await getData(`barangay-name-List/`, {});
-    if (getBarangay.status) {
-      setBarangayList(getBarangay.data);
-    } else {
-      setBarangayList([]);
-    }
-  };
-
-
   useEffect(() => {
+    const getBarangayList = async (id) => {
+      const getBarangay = await getData(`barangay-name-List/`, {});
+      if (getBarangay.status) {
+        setBarangayList(getBarangay.data);
+      } else {
+        setBarangayList([]);
+      }
+    };
+
     getBarangayList();
     if (header === "Edit Data Reviewer Details") {
       selectedRow.profile.dob = moment(selectedRow.profile.dob).toDate();
       getSelection(selectedRow.barangay)
       setFormInputs(selectedRow);
     }
-  }, [selectedRow])
+  }, [header, selectedRow]);
 
   const getSelection = (obj) => {
     let data = Array(obj)
@@ -107,15 +106,12 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   const checkValidate = (formInputs) => {
     let errors = {}
     let data = ["first_name", "dob", "city", "municipality", "location", "email", "address",'barangay_id']
-    data.map((item,index)=>{
-    if(formInputs[item] === ""){
-      errors[item] = requiredField
-    }
+    data.foreach(item => {
+      if (formInputs[item] === "") {
+          errors[item] = requiredField
+        }
     })
-    if (formInputs.email === "") {
-      errors.email = requiredField;
-    }
-    else if (!formInputs.email.match(emailRegx)) {
+    if (!formInputs.email.match(emailRegx)) {
       errors.email = "You have entered a invalid e-mail address";
     }
     if (!onlyCharacter.test(formInputs.first_name)) {
@@ -205,11 +201,12 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   const formatSelectOptions = (data) => {
     let finalArr = [];
     if (data && data.length > 0) {
+      var counter = 0;
       data.forEach((item) => {
         finalArr.push({
-          value: item.id ? item.id : item.id,
-          label: item.first_name ? item.first_name : item.first_name,
-          name: item.first_name ? item.first_name : item.first_name,
+          value: item.id ? item.id : counter++,
+          label: item.first_name ? item.first_name : '',
+          name: item.first_name ? item.first_name : '',
         });
       });
     }
@@ -402,10 +399,10 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                   onChange={(selectedOption) => handleOnChange(selectedOption)}
                   value={barangayValue}
                   placeholder="Select "
-                  isDisabled={is_edit}
+                  isDisabled={(is_edit && (userRole().role !== 'superadmin'))}
                 />
                 {
-                  validated && formInputs?.barangay_id == '' &&
+                  validated && formInputs?.barangay_id === '' &&
                   <div className="err-feedback">  {errorObject?.barangay_id}</div>
                 }
               </Col>
@@ -446,7 +443,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
               loading={loading}
               className="btn-primary button-width text-white"
             >
-              {header == "Edit Data Reviewer Details" ? "Update" : "Add"}
+              {header === "Edit Data Reviewer Details" ? "Update" : "Add"}
             </Button>
           </div>
         </div>
