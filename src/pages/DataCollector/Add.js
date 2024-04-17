@@ -143,17 +143,14 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
   const checkValidate = (formInputs) => {
     let errors = {}
     let data = ["first_name", "email", "barangay_id", "data_reviewer_id", "address"]
-    data.map((item, index) => {
+    data.foreach(item => {
       if (formInputs[item] === "") {
         errors[item] = requiredField;
       }
-      if (formInputs.email === "") {
-        errors.email = requiredField;
-      }
-      else if (!formInputs.email.match(emailRegx)) {
-        errors.email = "You have entered a invalid e-mail address";
-      }
-    })
+    });
+    if (!formInputs.email.match(emailRegx)) {
+      errors.email = "You have entered a invalid e-mail address";
+    }
     if (!onlyCharacter.test(formInputs.first_name)) {
       errors.first_name = requiredField;
     }
@@ -416,7 +413,7 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
                     onChange={(selectedOption) => handleBarangayOnChange(selectedOption)}
                     value={barangayValue}
                     placeholder="Select "
-                    
+                    isDisabled={(is_edit && (userRole().role !== 'superadmin'))}
                   />
                   {
                     validated && formInputs?.barangay_id === '' &&
