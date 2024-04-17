@@ -1,5 +1,6 @@
 //export const baseURL = "https://apiuatrbim.underdev.in/api/";
 //export const baseURL = " https://apirbim.underdev.in/api/";
+export const LIST_ALL = "0cc159cd881c41f183d89119e47dcef9";
 export const baseURL = process.env.REACT_APP_API_URL;
 export const isLoading = () => {
   document.getElementById("pageLoader").classList.add("d-block");

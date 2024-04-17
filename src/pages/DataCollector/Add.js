@@ -10,7 +10,7 @@ import { Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FiInfo } from "react-icons/fi";
 
-import { getData, postData, putData, userRole } from "../../api";
+import { LIST_ALL, getData, postData, putData, userRole } from "../../api";
 import { emailRegx, onlyCharacter, requiredField } from "../../api/regex";
 import Button from "../../components/Form/Button";
 import FormModal from "../../components/FormModal";
@@ -71,7 +71,7 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
       setdataReviewerList([]);
       let url = "data-reviewer-name-list/" + id + '/';
       if (userRole().role === 'superadmin') {
-        url = "data-reviewer-name-list/-1/"
+        url = "data-reviewer-name-list/" + LIST_ALL + "/";
       }
       const res = await getData(url, {});
       if (res.status === 1) {
