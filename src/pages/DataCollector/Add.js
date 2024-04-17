@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
-import { Form } from "react-bootstrap";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Form } from "react-bootstrap";
 import { toast } from "react-toastify";
-import InputGroup from 'react-bootstrap/InputGroup';
 import { FiInfo } from "react-icons/fi";
-import Select from "react-select";
 
 import { getData, postData, putData, userRole } from "../../api";
 import { emailRegx, onlyCharacter, requiredField } from "../../api/regex";
@@ -17,7 +17,6 @@ import FormModal from "../../components/FormModal";
 
 const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
   const [loading, setLoading] = useState(false);
-  const [addObject, setAddObject] = useState({});
   const [validated, setValidated] = useState(false);
   const [barangayList, setbarangayList] = useState([]);
   const [dataReviewerList, setdataReviewerList] = useState([]);
@@ -66,7 +65,6 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
     }));
   };
 
-  //Get barangay list
   useEffect(() => {
   // get data reviewer list function
     const getDataReviewerNamelist = async (id) => {
@@ -81,7 +79,7 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
       }
     };
 
-      // get barangay list function
+    // get barangay list function
     const getBarangayNamelist = async () => {
       setbarangayList([]);
       let res = await getData("barangay-name-List/", {});
@@ -147,7 +145,6 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
     let data = ["first_name", "email", "barangay_id", "data_reviewer_id", "address"]
     data.map((item, index) => {
       if (formInputs[item] === "") {
-        // errors[item] = `${item} is required field`
         errors[item] = requiredField;
       }
       if (formInputs.email === "") {
@@ -276,7 +273,7 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
 
   const getOfficialNumber=async(barangay_id)=>{
     const data={
-      "municipality":'',
+    "municipality":'',
     "location":'',
     "role":'data_collector',
     "barangay":barangay_id
@@ -321,23 +318,18 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">Date of birth</Form.Label>
                 <Col column="sm" sm={8} className="position-relative">
-                  {/* <span className="calendar-icon">
-                  <i className="fa fa-calendar" aria-hidden="true"></i>
-                </span> */}
                   <DatePicker
                     ref={focusDate}
                     className="datepicker-add-barangay form-control"
                     selected={formInputs.profile.dob}
                     onChange={handleDateChange}
                     name="dob"
-                    dateFormat="dd-MM-yyyy"
+                    dateFormat="MM-dd-yyyy"
                     dropdownMode="select"
                     showMonthDropdown
                     showYearDropdown
                     minDate={moment().subtract(60, "years")._d}
                     maxDate={moment().subtract(18, "years")._d}
-                    // inputFormat="yyyy-MM-dd"
-                    // dateFormat="yyyy-MM-dd"
                     calendarIcon={true}
                     closeCalendar={true}
                     clearIcon={true}
@@ -352,8 +344,6 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
               <Form.Group as={Row} className="mb-3" >
                 <Form.Label column sm={4} className="required">Sex at birth</Form.Label>
                 <Col column="sm" sm={8}>
-                  {/* <Form.Control type="text" name="reset_code" 
-                required   onChange={handleInput}/> */}
                   <Form.Select
                     onChange={handleProfile}
                     name="gender"
