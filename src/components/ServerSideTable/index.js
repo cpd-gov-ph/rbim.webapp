@@ -1,10 +1,10 @@
 import { DebounceInput } from "react-debounce-input";
-import "./style.scss";
 import { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import Loader from "../Loader";
 import { Pagination } from "./Pagination";
+import "./style.scss";
 
   /**
    * code implementation sourced from: 
