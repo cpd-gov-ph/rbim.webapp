@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { getData } from '../../api';
 import Loader from "../../components/Loader";
@@ -9,7 +9,7 @@ function ViewData() {
     let { id } = useParams();
     const [initLoading, setInitLoading] = useState(false);
 
-    const GetViewDetails = async () => {
+    const GetViewDetails = useCallback(async () => {
         setInitLoading(true);
         const res = await getData("view-data-collector/" + id + "/", {});
         if (res.status === 1) {
@@ -17,12 +17,11 @@ function ViewData() {
             setViewDetails(res.data);
             setInitLoading(false);
         }
-    }
-
+    }, [id]);
 
     useEffect(() => {
-        GetViewDetails();
-    }, []);
+        GetViewDetails(id);
+    }, [GetViewDetails, id]);
     return (
         <div>
             {!initLoading && (
