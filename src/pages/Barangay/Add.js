@@ -1,21 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Button from "../../components/Form/Button";
-import FormModal from "../../components/FormModal";
-import Input from "../../components/Form/Input";
-import { Form } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { getData, postData, putData } from "../../api";
-import { toast } from "react-toastify";
 import InputGroup from 'react-bootstrap/InputGroup';
-import { emailRegx, onlyCharacter, phoneNumberRegx, requiredField } from "../../api/regex";
-import { FiInfo } from "react-icons/fi";
 import Select from "react-select";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { Form } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { FiInfo } from "react-icons/fi";
 
-const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
+import { getData, postData, putData, userRole } from "../../api";
+import { emailRegx, onlyCharacter, requiredField } from "../../api/regex";
+import Button from "../../components/Form/Button";
+import FormModal from "../../components/FormModal";
+
+
+const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
   const [loading, setLoading] = useState(false);
   const [formInputs, setFormInputs] = useState({
     email: "",
@@ -31,7 +32,6 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
       gender: "",
     },
   });
-  const [date, setDate] = useState("");
   const [validated, setValidated] = useState(false);
   const [cityList, setCityList] = useState([]);
   const [locationList, setLocationList] = useState([]);
@@ -95,7 +95,15 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   };
 
   useEffect(() => {
-    console.log(is_edit)
+    const getCityList = async () => {
+      const getCity = await getData("city/", {});
+      if (getCity) {
+        setCityList(getCity);
+      } else {
+        setCityList([]);
+      }
+    };  
+
     getCityList();
     if (header === "Edit Barangay Official Details") {
       selectedRow.profile.dob = moment(selectedRow.profile.dob).toDate();
@@ -104,7 +112,10 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
       getSelectionLocation(selectedRow.location_info)
       setFormInputs(selectedRow);
     }
-  }, []);
+  }, [
+    header,
+    selectedRow
+  ]);
 
   const getSelectionCity = (obj) => {
     let data = Array(obj)
@@ -187,46 +198,35 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   }
 
   useEffect(() => {
+    const getMunicipalityList = async (id) => {
+      const getMunicipality = await getData(`city-to-municipality/${id}/`, {});
+      if (getMunicipality.status) {
+        setMunicipalityList(getMunicipality.data);
+      } else {
+        setMunicipalityList([]);
+      }
+    };
+
     if (formInputs.city) {
-      // getLocationList(formInputs.city);
       getMunicipalityList(formInputs.city);
     }
 
   }, [formInputs.city]);
 
   useEffect(() => {
+    const getLocationList = async (id) => {
+      const getLocation = await getData(`municipality-to-locations/${id}/`, {});
+      if (getLocation.status) {
+        setLocationList(getLocation.data);
+      } else {
+        setLocationList([]);
+      }
+    };
+
     if (formInputs.municipality) {
       getLocationList(formInputs.municipality);
     }
   }, [formInputs.municipality]);
-
-  const getMunicipalityList = async (id) => {
-    const getMunicipality = await getData(`city-to-municipality/${id}/`, {});
-    if (getMunicipality.status) {
-      setMunicipalityList(getMunicipality.data);
-    } else {
-      setMunicipalityList([]);
-    }
-  };
-
-  const getLocationList = async (id) => {
-    const getLocation = await getData(`municipality-to-locations/${id}/`, {});
-    if (getLocation.status) {
-      setLocationList(getLocation.data);
-    } else {
-      setLocationList([]);
-    }
-  };
-
-  const getCityList = async () => {
-    const getCity = await getData("city/", {});
-    if (getCity) {
-      setCityList(getCity);
-    } else {
-      setCityList([]);
-    }
-  };
-
 
   // new
   const handleSubmit = (event) => {
@@ -280,38 +280,13 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
     }
 
   };
-  // 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const form = event.currentTarget;
-  //   if (form.checkValidity() === false) {
-  //     event.preventDefault();
-  //     event.stopPropagation();
-  //     let errors = checkValidate(formInputs);
-  //     setErrorObject(errors)
-  //   }
-  //   setValidated(true);
-  //   if (form.checkValidity() === true) {
-  //     let errors = checkValidate(formInputs)
 
-  //     if (Object.keys(errors).length === 0) {
-  //       if (header === "Edit Barangay Official Details") {
-  //         updateBarangay();
-  //       } else {
-  //         addBarangay();
-  //       }
-  //     }
-  //     else {
-  //       setErrorObject(errors)
-  //     }
-  //   }
-  // };
   const updateBarangay = async () => {
     setLoading(true);
     const AddObject = structuredClone(formInputs);
     AddObject.profile.dob = moment(AddObject.profile.dob).format("YYYY-MM-DD");
     const updateBarangay = await putData(`barangay-update/${AddObject.id}/`, {}, AddObject);
-    if (updateBarangay && updateBarangay.status == 1) {
+    if (updateBarangay && updateBarangay.status === 1) {
       toast.success(updateBarangay.message, { theme: "colored" });
       setLoading(false);
       onClose();
@@ -326,7 +301,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
     const AddObject = structuredClone(formInputs);
     AddObject.profile.dob = moment(AddObject.profile.dob).format("YYYY-MM-DD");
     const postBarangay = await postData("create-barangay/", {}, AddObject);
-    if (postBarangay && postBarangay.status == 1) {
+    if (postBarangay && postBarangay.status === 1) {
       toast.success(postBarangay.message, { theme: "colored" });
       setLoading(false);
       onClose();
@@ -347,9 +322,6 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
       },
     }));
   };
-  useEffect(() => {
-    console.log(errorObject, 'err')
-  }, [errorObject])
 
   const formatSelectOptions = (data) => {
     let finalArr = [];
@@ -403,7 +375,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
     "role":'barangay'
     }
     const response = await postData("get-official-id/", {}, data);
-    if(response && response.status ===1){
+    if(response && response.status === 1){
       setFormInputs((prev) => ({
         ...prev,
         profile: {
@@ -419,7 +391,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
   }
  
   return (
-    <>
+    <div>
       <FormModal heading={header} show={show} onClose={onClose} size="lg">
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <div className="row add-barangay">
@@ -428,7 +400,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 <Form.Label column sm={5} className="required">
                   Barangay official name
                 </Form.Label>
-                <Col column sm={7}>
+                <Col column="sm" sm={7}>
                   <Form.Control
                     type="text"
                     name="first_name"
@@ -446,7 +418,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 <Form.Label column sm={5} className="required">
                   Date of birth
                 </Form.Label>
-                <Col column sm={7} className="position-relative">
+                <Col column="sm" sm={7} className="position-relative">
                   <DatePicker
                     ref={focusDate}
                     className="datepicker-add-barangay"
@@ -478,7 +450,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 <Form.Label column sm={5} className="required">
                   Sex at birth
                 </Form.Label>
-                <Col column sm={7}>
+                <Col column="sm" sm={7}>
                   {/* <Form.Control type="text" name="reset_code" 
                 required   onChange={handleInput}/> */}
                   <Form.Select
@@ -501,7 +473,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 <Form.Label column sm={5} className="required">
                   Mobile number
                 </Form.Label>
-                <Col column sm={7}>
+                <Col column="sm" sm={7}>
                   <InputGroup className="phone-group">
                     <InputGroup.Text>
                       +63
@@ -530,7 +502,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 <Form.Label column sm={5} className="required">
                   Email ID
                 </Form.Label>
-                <Col column sm={7}>
+                <Col column="sm" sm={7}>
                   <Form.Control
                     type="text"
                     name="email"
@@ -548,7 +520,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 <Form.Label column sm={5} className="required">
                   Assigned province
                 </Form.Label>
-                <Col column sm={7}>
+                <Col column="sm" sm={7}>
                   <Select
                     closeMenuOnSelect={true}
                     hideSelectedOptions={false}
@@ -556,10 +528,10 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                     onChange={(selectedOption) => handleCityOnChange(selectedOption)}
                     value={cityValue}
                     placeholder="Select "
-                    isDisabled={is_edit}
+                    isDisabled={(is_edit && (userRole().role !== 'superadmin'))}
                   />
                   {
-                    validated && formInputs?.city == '' &&
+                    validated && formInputs?.city === '' &&
                     <div className="err-feedback"> {requiredField}</div>
                   }
 
@@ -588,7 +560,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 <Form.Label column sm={5} className="required">
                   Assigned city/municipality
                 </Form.Label>
-                <Col column sm={7}>
+                <Col column="sm" sm={7}>
 
                   <Select
                     closeMenuOnSelect={true}
@@ -597,10 +569,10 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                     onChange={(selectedOption) => handleMunicipalityOnChange(selectedOption)}
                     value={municipalityValue}
                     placeholder="Select "
-                    isDisabled={formInputs.city && !is_edit ? false : true}
+                    isDisabled={(formInputs.city && !is_edit) || (userRole().role === 'superadmin') ? false : true}
                   />
                   {
-                    validated && formInputs?.municipality == '' &&
+                    validated && formInputs?.municipality === '' &&
                     <div className="err-feedback"> {requiredField}</div>
                   }
 
@@ -630,7 +602,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 <Form.Label column sm={5} className="required">
                   Assigned barangay
                 </Form.Label>
-                <Col column sm={7}>
+                <Col column="sm" sm={7}>
                   <Select
                     closeMenuOnSelect={true}
                     hideSelectedOptions={false}
@@ -638,10 +610,10 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                     onChange={(selectedOption) => handleLocationOnChange(selectedOption)}
                     value={locationValue}
                     placeholder="Select "
-                    isDisabled={formInputs.municipality && !is_edit ? false : true}
+                    isDisabled={(formInputs.municipality && !is_edit) || (userRole().role === 'superadmin') ? false : true}
                   />
                   {
-                    validated && formInputs?.location == '' &&
+                    validated && formInputs?.location === '' &&
                     <div className="err-feedback"> {requiredField}</div>
                   }
 
@@ -665,16 +637,16 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                     <Form.Control.Feedback type="invalid">
                       {requiredField}
                     </Form.Control.Feedback> */}
-                  <p className="barangay-info">
+                  <div className="barangay-info">
                     <div> <FiInfo className="me-1" /> You can access a barangay official list only after selecting the city</div>
-                  </p>
+                  </div>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
                 <Form.Label column sm={5} className="required">
                   BO code
                 </Form.Label>
-                <Col column sm={7}>
+                <Col column="sm" sm={7}>
                   <Form.Control
                     type="text"
                     name="official_number"
@@ -693,7 +665,7 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 <Form.Label column sm={5} className="required">
                   Barangay hall complete address
                 </Form.Label>
-                <Col column sm={7}>
+                <Col column="sm" sm={7}>
                   <Form.Control
                     as="textarea"
                     name="address"
@@ -722,13 +694,13 @@ const Add = ({ show, onClose, header, selectedRow,is_edit }) => {
                 loading={loading}
                 className="btn-primary button-width text-white"
               >
-                {header == "Edit Barangay Official Details" ? "Update" : "Add"}
+                {header === "Edit Barangay Official Details" ? "Update" : "Add"}
               </Button>
             </div>
           </div>
         </Form>
       </FormModal>
-    </>
+    </div>
   );
 };
 
