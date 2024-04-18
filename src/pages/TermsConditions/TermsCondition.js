@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Markup } from 'interweave';
+import Card from 'react-bootstrap/Card';
 import './style.scss';
 import { getData } from "../../api";
 import Loader from "../../components/Loader";
-import Card from 'react-bootstrap/Card';
-import { Markup } from 'interweave';
 
-const TermsConditionEditor = ({ whichPrivacy }) => {
+const TermsCondition = ({ whichPrivacy }) => {
   const [privacyContent, setPrivacyContent] = useState("");
   const [termsContent, setTermsContent] = useState("");
   const [initLoading, setInitLoading] = useState(false);
@@ -39,7 +39,6 @@ const TermsConditionEditor = ({ whichPrivacy }) => {
     <React.Fragment>
       {!initLoading && (
         <React.Fragment>
-
           <div className="privacy">
             <h4 className="page-title mb-3"> Privacy Policy</h4>
             <Card>
@@ -60,7 +59,6 @@ const TermsConditionEditor = ({ whichPrivacy }) => {
               </Card.Body>
             </Card>
           </div>
-
         </React.Fragment>
       )}
       {initLoading && <Loader />}
@@ -68,4 +66,4 @@ const TermsConditionEditor = ({ whichPrivacy }) => {
   );
 };
 
-export default TermsConditionEditor;
+export default TermsCondition;

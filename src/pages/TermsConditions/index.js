@@ -14,8 +14,8 @@ const TermsConditions = () => {
   return (
     <div>
       {
-        userRole()?.role == 'superadmin' ?
-          <>
+        userRole()?.role === 'superadmin' ?
+          <div>
             <h4 className="page-title">Legal & Documentation</h4>
             <div className="content-wrapper mt-3">
               <div className="privacy-policy-main ">
@@ -55,7 +55,7 @@ const TermsConditions = () => {
                 </div>
               </div>
             </div>
-          </>
+          </div>
           :
           <div className="privacy-policy-main ">
             <TermsCondition />

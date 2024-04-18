@@ -5,7 +5,6 @@ import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
 //scss
 import "./style.scss";
-import PrivateRoute from "../privateRoute";
 import 'react-toastify/dist/ReactToastify.css';
 import Toast from "../components/Toast";
 import TermsConditionModal from '../pages/TermsConditions/TermsConditionModal'
@@ -23,7 +22,7 @@ export default function Layout(props) {
 
   const logOut = async () => {
     const res = await getData("logout/", {});
-    if (res.status == 1) {
+    if (res.status === 1) {
       setTermsConditionShowModal(false);
       localStorage.clear();
       navigate("/login-selection");
@@ -31,7 +30,7 @@ export default function Layout(props) {
   }
 
   return (
-    <>
+    <div>
       {/* <PrivateRoute> */}
       <Header handleNav={() => setShowNav(!showNav)} handleShow={showNav} />
       <main className="main-layout">
@@ -43,8 +42,8 @@ export default function Layout(props) {
       </main>
 
       {
-        userRole()?.role != 'superadmin' &&
-          getTermsPrivacyStatus() == 0 ?
+        userRole()?.role !== 'superadmin' &&
+          getTermsPrivacyStatus() === 0 ?
           < TermsConditionModal
             show={termsConditionShowModal}
             onClose={() => setTermsConditionShowModal(false)}
@@ -53,6 +52,6 @@ export default function Layout(props) {
           : ''
       }
       {/* </PrivateRoute> */}
-    </>
+    </div>
   );
 }

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import './style.scss';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic/';
 import Button from "../../components/Form/Button";
-import { postData, getData } from "../../api";
+import { postData, getData, userRole } from "../../api";
 import Loader from "../../components/Loader";
 import { toast } from "react-toastify";
 
@@ -62,7 +62,7 @@ const TermsConditionEditor = ({ whichPrivacy, editData, onclose }) => {
     }
   };
 
-  const getTermsSetting = async () => {
+  const getTermsSetting = useCallback(async () => {
     let legalConditions = whichPrivacy === "terms" ? "term_and_conditions" : "privacy_and_policy"
     setInitLoading(true);
     const res = await getData(`view-options/${legalConditions}/`, {});
@@ -75,7 +75,7 @@ const TermsConditionEditor = ({ whichPrivacy, editData, onclose }) => {
     } else {
       setInitLoading(false);
     }
-  };
+  }, [whichPrivacy]);
 
   const saveSettingClick = async () => {
     setInitLoading(true);
@@ -95,7 +95,7 @@ const TermsConditionEditor = ({ whichPrivacy, editData, onclose }) => {
 
   useEffect(() => {
     getTermsSetting();
-  }, []);
+  }, [getTermsSetting]);
 
 
   return (
@@ -106,19 +106,19 @@ const TermsConditionEditor = ({ whichPrivacy, editData, onclose }) => {
           <React.Fragment>
             <CKEditor
               activeClass="p10"
-              content={content}
               editor={ClassicEditor}
               config={config}
-              data="<p>Hello from the first editor working with the context!</p>"
+              data={content}
               events={{
                 change: onChange,
               }}
+              disabled={userRole().role !== 'superadmin'}
             />
             <div className="text-end mt-3">
               <Button
                 type="button"
                 onClick={saveSettingClick}
-                disabled={initLoading}
+                disabled={initLoading || userRole().role !== 'superadmin'}
                 loading={initLoading}
                 className="btn-primary text-white"
               >
