@@ -172,11 +172,11 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
   const checkValidate = (formInputs) => {
     let errors = {}
     let data = ["first_name", "dob", "city", "municipality", "location", "email", "address"]
-    data.map((item, index) => {
+    data.foreach(item => {
       if (formInputs[item] === "") {
         errors[item] = requiredField
       }
-    })
+    });
     if (formInputs.email === "") {
       errors.email = requiredField;
     }
@@ -288,6 +288,7 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
 
   };
 
+  /*
   const updateBarangay = async () => {
     setLoading(true);
     const AddObject = structuredClone(formInputs);
@@ -317,9 +318,9 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
       toast.error(postBarangay.message, { theme: "colored" });
     }
   };
+*/
 
   const handleDateChange = (date) => {
-    // setDate(date);
     delete errorObject["dob"]
     setFormInputs((prev) => ({
       ...prev,
