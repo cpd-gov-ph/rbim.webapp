@@ -1,3 +1,10 @@
+/**
+ * TODO: 
+ *  1. use province list
+ *  2. fix api/server to limit no. of return values
+ *  3. look into js violations for reflow and mouse handlers
+ */
+
 import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
 import Col from "react-bootstrap/Col";
