@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
+import moment from "moment";
+import { toast } from "react-toastify";
+import { Form } from "react-bootstrap";
+import { Markup } from 'interweave';
 import './style.scss';
 import { postData, getData } from "../../api";
 import Loader from "../../components/Loader";
-import { toast } from "react-toastify";
 import FormModal from "../../components/FormModal";
 import Button from "../../components/Form/Button";
-import { Form } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { requiredField } from "../../api/regex";
-import { Markup } from 'interweave';
-import moment from "moment";
 
 const TermsConditionModal = ({ show, onClose, onLogout }) => {
 
@@ -25,8 +22,7 @@ const TermsConditionModal = ({ show, onClose, onLogout }) => {
     agreeTermsPrivacy: []
   });
   const [validated, setValidated] = useState(false);
-  const [errorObject, setErrorObject] = useState({});
-
+  
 
   useEffect(() => {
     getTermsSetting("terms");
@@ -76,8 +72,6 @@ const TermsConditionModal = ({ show, onClose, onLogout }) => {
     }
   };
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -107,17 +101,6 @@ const TermsConditionModal = ({ show, onClose, onLogout }) => {
       }
     }
   };
-
-  // const compareDate = () => {
-  //   setLastUpdated(moment(termsUpdatedDate).format("DD/MM/YYYY"))
-  //   let privacyDate = privacyUpdatedDate
-  //   let termsDate = termsUpdatedDate
-  //   if (privacyDate > termsDate) {
-  //     setLastUpdated(moment(termsDate).format("DD/MM/YYYY"))
-  //   } else {
-  //     setLastUpdated(moment(privacyDate).format("DD/MM/YYYY"))
-  //   }
-  // }
 
   return (
     <React.Fragment>
