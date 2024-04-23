@@ -106,7 +106,7 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
   const checkValidate = (formInputs) => {
     let errors = {}
     let data = ["first_name", "dob", "city", "municipality", "location", "email", "address",'barangay_id']
-    data.foreach(item => {
+    data.forEach(item => {
       if (formInputs[item] === "") {
           errors[item] = requiredField
         }
