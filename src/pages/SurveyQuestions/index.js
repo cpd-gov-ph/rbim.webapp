@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { getData } from "../../api";
-import ClientSideTable from "../../components/ClientSideTable";
-//scss
-import "./style.scss";
 import {  useNavigate } from "react-router-dom";
+import { getData } from "../../api";
 import Loader from "../../components/Loader";
+import ClientSideTable from "../../components/ClientSideTable";
+import "./style.scss";
 
 const SurveyQuestion = () => {
   let navigate = useNavigate();

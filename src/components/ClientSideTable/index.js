@@ -1,6 +1,10 @@
-import { useReactTable, getPaginationRowModel, getCoreRowModel, flexRender } from '@tanstack/react-table'; 
-import { Box } from '@chakra-ui/react';
-
+import { 
+  useReactTable, 
+  getPaginationRowModel, 
+  getCoreRowModel, 
+  flexRender 
+} from '@tanstack/react-table'; 
+import { Box, Button, ButtonGroup, Icon, Text } from '@chakra-ui/react';
 import "./style.scss";
 
 const ClientSideTable = ({ data, columns, sizePerPage }) => {
@@ -45,6 +49,25 @@ const ClientSideTable = ({ data, columns, sizePerPage }) => {
           </tbody>
         </table>
       </Box>
+      <br />
+      <Text mb={2}>
+        Page {tableInstance.getState().pagination.pageIndex + 1} of{" "}
+        {tableInstance.getPageCount()}
+      </Text>
+      <ButtonGroup size="sm" isAttached variant="outline">
+        <Button
+          onClick={() => tableInstance.previousPage()}
+          isDisabled={!tableInstance.getCanPreviousPage()}
+        >
+          {"<"}
+        </Button>
+        <Button
+          onClick={() => tableInstance.nextPage()}
+          isDisabled={!tableInstance.getCanNextPage()}
+        >
+          {">"}
+        </Button>
+      </ButtonGroup>
     </Box>
   );
 };
