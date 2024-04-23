@@ -11,11 +11,11 @@ const SurveyQuestion = () => {
   const [questionList, setQuestionList] = useState([]);
 
   //action column
-  const actionButton = (cell, row) => {
+  const ActionButton = (row, viewClick) => {
     return (
       <>
         <div className="action-buttons">
-          <button className="btn btn-link " onClick={() => ViewClick(row)}>
+          <button className="btn btn-link " onClick={() => viewClick(row)}>
             <i className="fa fa-eye" aria-hidden="true"></i>
           </button>
         </div>
@@ -36,7 +36,10 @@ const SurveyQuestion = () => {
       accessorKey: "action",
       header: "Action",
       headerStyle: { width: "15%", textAlign: "center" },
-      formatter: actionButton,
+      cell: (props) => ActionButton(
+        props.row.original, 
+        viewClick,
+        ),
       style: { textAlign: "center" },
     },
   ];
@@ -58,7 +61,7 @@ const SurveyQuestion = () => {
 
 
   //View question 
-  const ViewClick = (row) => {
+  const viewClick = (row) => {
     document.body.classList.add('adminSurveyQusView');
     navigate("/survey-question/view/" + row.id);
   };
