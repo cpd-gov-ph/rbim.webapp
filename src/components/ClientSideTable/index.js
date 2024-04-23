@@ -4,7 +4,7 @@ import {
   getCoreRowModel, 
   flexRender 
 } from '@tanstack/react-table'; 
-import { Box, Button, ButtonGroup, Icon, Text } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Text } from '@chakra-ui/react';
 import "./style.scss";
 
 const ClientSideTable = ({ data, columns, sizePerPage }) => {
@@ -59,13 +59,13 @@ const ClientSideTable = ({ data, columns, sizePerPage }) => {
           onClick={() => tableInstance.previousPage()}
           isDisabled={!tableInstance.getCanPreviousPage()}
         >
-          {"<"}
+          ◀️
         </Button>
         <Button
           onClick={() => tableInstance.nextPage()}
           isDisabled={!tableInstance.getCanNextPage()}
         >
-          {">"}
+          ▶️
         </Button>
       </ButtonGroup>
     </Box>
