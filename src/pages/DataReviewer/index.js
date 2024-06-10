@@ -16,16 +16,19 @@ const DataReviewer = () => {
   const [modalState, setModalState] = useState('');
   const [selectedRow, setSelectedRow] = useState({});
   const [isEdit,setIsEdit]=useState(false);
+
   const addShowModalClose = () => {
     setModalOpen(false);
     getReviewerList(pagination.page, pagination.sizePerPage, "");
     setLoading(true);
   };
+
   //View data reviewer page
   const viewClick = (row) => {
     
     navigate("/data-reviewer/view/" + row.id);
   };
+
   // edit data reviewer
   const editClick = (row) => {
     setModalOpen(true);
@@ -33,10 +36,12 @@ const DataReviewer = () => {
     setSelectedRow(row);
     setIsEdit(true)
   };
+
   // delete data reviewer
   // const DeleteClick = (row) => {
   //   console.log(row)
   // };
+  
   const addUserClick = () => {
     setModalOpen(true);
     setModalState("Add New Data Reviewer");
@@ -81,6 +86,7 @@ const DataReviewer = () => {
         ),
     }
   ];
+
   const onFilter = (search) => {
     getReviewerList(search);
   };
@@ -94,10 +100,10 @@ const DataReviewer = () => {
       search: search
     };
     try {
-      const getData = await postData("list-data-reviewer/", {}, params);
-      if (getData && getData.status === 1) {
-        setUserList(getData.data);
-        setTotalSize(Math.ceil(getData.paginator.total_records / params.page_size));
+      const res = await postData("list-data-reviewer/", {}, params);
+      if (res && res.status === 1) {
+        setUserList(res.data);
+        setTotalSize(Math.ceil(res.paginator.total_records / params.page_size));
         setLoading(false);
       }
     } catch (err) { }
