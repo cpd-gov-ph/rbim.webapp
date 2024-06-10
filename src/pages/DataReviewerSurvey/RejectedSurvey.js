@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
-import ServerSideTable from "../../components/ServerSideTable";
-import { postData } from "../../api";
-import Loader from "../../components/Loader";
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import './style.scss'
+import { FaAngleRight } from 'react-icons/fa';
 import moment from "moment";
 import Badge from 'react-bootstrap/Badge';
-import { FaAngleRight } from 'react-icons/fa';
-import { useNavigate } from "react-router-dom";
+
+import { postData } from "../../api";
+import Loader from "../../components/Loader";
+import ServerSideTable from "../../components/ServerSideTable";
+import { usePagination } from "../../components/ServerSideTable/usePagination";
+
+import './style.scss'
+
 const RejectedSurvey = () => {
   let navigate = useNavigate();
   const [initLoading, setInitLoading] = useState(false);
   const [surveyList, setSurveyList] = useState([]);
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizeperPage] = useState(10);
   const [totalSize, setTotalSize] = useState(0);
 
-  useEffect(() => {
-    getSurveyList(page, sizePerPage, "",true);
-  }, []);
+  const { onPaginationChange, pagination } = usePagination();
 
   const ViewSurveyClick = (row) => {
     console.log(row);
@@ -29,18 +29,102 @@ const RejectedSurvey = () => {
       navigate("/survey/" + row.id);
     }
   }
-  const getSurveyList = async (page, sizePerPage, search,loading) => {
-    setInitLoading(loading);
-    let obj = {
-      page: page,
-      page_size: sizePerPage,
-      search: search ? search : "",
+
+  const surveyIDFormatter = (row) => {
+    return (
+      <div>
+        <div className="survey-id">Survey ID - {row.survey_number}</div>
+      </div>
+    )
+  }
+
+  const surveyDateFormatter = (row) => {
+    return (
+      <div>
+        <div className="survey-date"><span>Date Rejected  - </span>{moment(row.survey_rejected_on).format("DD/MM/YYYY")} </div>
+      </div>
+    )
+  }
+
+  const surveyCollectorIdFormatter = (row) => {
+    return (
+      <div>
+              <div className="survey-date"><span>{row.data_collector?.official_number ?'Data Collector ID  - '+ row.data_collector?.official_number : '-'}</span> </div>
+      </div>
+    )
+  }
+
+  const surveyStatusFormatter = (row) => {
+    return (
+      <div>
+        <Badge pill bg="secondary" className="survey-status">  {row.survey_type === 'ocr' ? "OCR" : row.survey_type} </Badge>
+      </div>
+    )
+  }
+  const surveyAction = (row) => {
+    return (
+      <div>
+        <FaAngleRight className="survey-action" onClick={() => ViewSurveyClick(row)}> </FaAngleRight>
+      </div>
+    )
+  }
+
+  const columns = [
+
+    {
+      accessorKey: "survey_number",
+      headerStyle: { width: "15%", textAlign: "left" },
+      style: { textAlign: "left" },
+      cell: (props) => surveyIDFormatter(
+        props.row.original,
+        ),      
+    },
+    {
+      accessorKey: "assigned_date",
+      headerStyle: { width: "20%", textAlign: "left" },
+      style: { textAlign: "left" },
+      cell: (props) => surveyDateFormatter(
+        props.row.original,
+        ),      
+    },
+    {
+      accessorKey: "data_collector.official_number",
+      headerStyle: { width: "20%", textAlign: "left" },
+      style: { textAlign: "left" },
+      cell: (props) => surveyCollectorIdFormatter(
+        props.row.original,
+        ),      
+    },
+    {
+      accessorKey: "survey_type",
+      headerStyle: { width: "20%", textAlign: "left" },
+      style: { textAlign: "left" },
+      cell: (props) => surveyStatusFormatter(
+        props.row.original,
+        ),      
+    },
+    {
+      accessorKey: "action",
+      headerStyle: { width: "20%", textAlign: "left" },
+      style: { textAlign: "center" },
+      cell: (props) => surveyAction(
+        props.row.original,
+        ),
+    }
+  ];
+
+  const getSurveyList = useCallback(async(search="") => {
+    setInitLoading(true);
+    let params = {
+      page: pagination.pageIndex + 1,
+      page_size: pagination.pageSize,
+      search: search,
       status: "survey_rejected",
     };
 
-    const res = await postData("get-survey-list/", {}, obj);
-    if (res.status === 1) {
-      setTotalSize(res.paginator.total_records);
+    const res = await postData("get-survey-list/", {}, params);
+    if (res && res.status === 1) {
+      setTotalSize(Math.ceil(res.paginator.total_records / params.page_size));
       setSurveyList(res.data)
       setInitLoading(false);
     } else if (res.status === 422) {
@@ -49,107 +133,35 @@ const RejectedSurvey = () => {
       setInitLoading(false);
       toast.error(res.message, { theme: "colored" });
     }
-  }
+  }, [pagination]);
 
-  const surveyIDFormatter = (cell, row) => {
-    return (
-      <>
-        <div className="survey-id">Survey ID - {row.survey_number}</div>
-      </>
-    )
-  }
-
-  const surveyDateFormatter = (cell, row) => {
-    return (
-      <>
-        <div className="survey-date"><span>Date Rejected  - </span>{moment(row.survey_rejected_on).format("DD/MM/YYYY")} </div>
-      </>
-    )
-  }
-
-  const surveyCollectorIdFormatter = (cell, row) => {
-    return (
-      <>
-              <div className="survey-date"><span>{row.data_collector?.official_number ?'Data Collector ID  - '+ row.data_collector?.official_number : '-'}</span> </div>
-      </>
-    )
-  }
-
-  const surveyStatusFormatter = (cell, row) => {
-    return (
-      <>
-        <Badge pill bg="secondary" className="survey-status">  {row.survey_type === 'ocr' ? "OCR" : row.survey_type} </Badge>
-      </>
-    )
-  }
-  const surveyAction = (cell, row) => {
-    return (
-      <>
-        <FaAngleRight className="survey-action" onClick={() => ViewSurveyClick(row)}> </FaAngleRight>
-      </>
-    )
-  }
-
-  const columns = [
-
-    {
-      dataField: "survey_number",
-      headerStyle: { width: "15%", textAlign: "left" },
-      style: { textAlign: "left" },
-      formatter: surveyIDFormatter,
-    },
-    {
-      dataField: "assigned_date",
-      headerStyle: { width: "20%", textAlign: "left" },
-      style: { textAlign: "left" },
-      formatter: surveyDateFormatter,
-    },
-    {
-      dataField: "data_collector.official_number",
-      headerStyle: { width: "20%", textAlign: "left" },
-      style: { textAlign: "left" },
-      formatter: surveyCollectorIdFormatter,
-    },
-    {
-      dataField: "survey_type",
-      headerStyle: { width: "20%", textAlign: "left" },
-      style: { textAlign: "left" },
-      formatter: surveyStatusFormatter,
-    },
-    {
-      dataField: "action",
-      headerStyle: { width: "20%", textAlign: "left" },
-      style: { textAlign: "center" },
-      formatter: surveyAction,
-    }
-  ];
-
-  const onFilter = (page, sizePerPage, search) => {
-    setPage(page);
-    setSizeperPage(sizePerPage);
-    getSurveyList(page, sizePerPage, search,false);
+  const onFilter = (search) => {
+    getSurveyList(search);
   };
 
+  useEffect(() => {
+    getSurveyList("");
+  }, [getSurveyList]);
+
   return (
-    <>
+    <div>
       {!initLoading && (
         <div className="reviewer-survey-list">
           <ServerSideTable
-            columns={columns}
             data={surveyList}
-            page={page}
-            sizePerPage={sizePerPage}
-            totalSize={totalSize}
-            onFilter={onFilter}
+            columns={columns}
             loading={initLoading}
+            onPaginationChange={onPaginationChange}
+            pageCount={totalSize}
+            pagination={pagination}
+            onFilter={onFilter}
             noDataMessage='No surveys assigned'
           >
           </ServerSideTable>
         </div>
       )}
       {initLoading && <Loader />}
-    </>
-
+    </div>
   );
 };
 

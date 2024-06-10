@@ -1,6 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
-import { NavLink } from "react-router-dom";
-import drop from '../../assets/images/drop_icon.png';
+import React, { useState } from "react";
 import AssignedSurvey from "./AssignedSurvey";
 import OngingSurvey from "./OngingSurvey";
 import RejectedSurvey from './RejectedSurvey';
@@ -13,7 +11,6 @@ import { toast } from "react-toastify";
 import { postUploadData } from "../../api";
 
 function DataReviewerSurvey() {
-  const fileInputRef = useRef();
   const [newOCR, showNewOCR] = useState(false);
   const [loading, setLoading] = useState(false);
   const [whichSurvey, setWhichSurvey] = useState("assigned");
