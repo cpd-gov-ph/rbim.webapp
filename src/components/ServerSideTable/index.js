@@ -6,21 +6,24 @@ import Loader from "../Loader";
 import { Pagination } from "./Pagination";
 import "./style.scss";
 
-  /**
-   * code implementation sourced from: 
-   * https://medium.com/@aylo.srd/server-side-pagination-and-sorting-with-tanstack-table-and-react-bd493170125e
-   * https://www.youtube.com/watch?v=CjqG277Hmgg
-  */
-  const ServerSideTable = ({
-  data,
-  columns,
-  children,
-  loading,
-  onPaginationChange,
-  pageCount,
-  pagination,
-  onFilter,
-}) => {
+/**
+ * code implementation sourced from: 
+ * https://medium.com/@aylo.srd/server-side-pagination-and-sorting-with-tanstack-table-and-react-bd493170125e
+ * https://www.youtube.com/watch?v=CjqG277Hmgg
+*/
+const ServerSideTable = ({
+    data,
+    columns,
+    children,
+    loading,
+    onPaginationChange,
+    pageCount,
+    pagination,
+    onFilter,
+    rowSelect = false,
+    onSelectRow,
+    rowStates
+  }) => {
   const [searchValue, setSearchValue] = useState("");
   const tableInstance = useReactTable({
     data,
@@ -28,8 +31,14 @@ import "./style.scss";
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     onPaginationChange,
-    state: { pagination },
+    state: { 
+      pagination: pagination,
+      rowSelection: rowStates
+    },
     pageCount,
+    enableRowSelection: rowSelect,
+    onRowSelectionChange: onSelectRow,
+    getRowId: row => row.id
   });
   const searchChange = (e) => {
     setSearchValue(e.target.value);
@@ -65,7 +74,7 @@ import "./style.scss";
                 <tr className="tr" key={headerGroup.id}>
                   {headerGroup.headers.map(header => 
                     <th className="th" scope="col" width={header.getSize()} key={header.id}>
-                      {header.column.columnDef.header}
+                      { flexRender(header.column.columnDef.header, header.getContext()) }
                     </th>
                   )}
                 </tr>

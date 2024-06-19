@@ -1,71 +1,72 @@
-import { DebounceInput } from "react-debounce-input";
-import Loader from "../Loader";
-import "./style.scss";
-import { useState, } from "react";
+import { useState, useEffect } from "react";
+
+import ServerSideTable from ".";
+import IndeterminateCheckbox from "./IndeterminateCheckbox";
 
 const CheckedTable = ({
   data,
   columns,
-  page,
-  sizePerPage,
-  totalSize,
-  onFilter,
-  loading,
   children,
-  selectRow,
-  clickSelect,
-  isAllSelect,
-  getSelectedRow
+  loading,
+  onPaginationChange,
+  pageCount,
+  pagination,
+  onFilter,
+  setRows,
 }) => {
-  const [searchValue, setSearchValue] = useState("");
-  // const [selectRowId, setSelectRowId] = useState([]);
-  //const refBtn = useRef(null); 
+  const [newColumns, setNewColumns] = useState([]);
+  const [rowSelection, setRowSelection] = useState({});
 
-  const onTableChange = (type, { page, sizePerPage }) => {
-    onFilter(page, sizePerPage, "");
-  };
-  // const rmvDuplicate = (arr) => {
-  //   let uniqueArr = arr.filter((item, index) => {
-  //     return arr.indexOf(item) === index;
-  //   });
-  //   return uniqueArr;
-  // };
- 
+  useEffect(() => {
+    setRows(rowSelection);
+  }, [setRows, rowSelection])
+  
 
+  const selectColumns = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <IndeterminateCheckbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler(),
+            }}
+          />
+      ),
+      cell: ({ row }) => (
+        <IndeterminateCheckbox
+        {...{
+          checked: row.getIsSelected(),
+          disabled: !row.getCanSelect(),
+          indeterminate: row.getIsSomeSelected(),
+          onChange: row.getToggleSelectedHandler(),
+        }}
+      />
+      ),
+    },
+  ];
 
-  const searchChange = (e) => {
-    setSearchValue(e.target.value);
-    onFilter(1, sizePerPage, e.target.value);
-  };
-
+  if (newColumns.length === 0) {
+    setNewColumns(newColumns => selectColumns.concat(columns));
+  } 
 
   return (
-    <div>
-      <div className="server-side-table">
-        <div className="search row p-3">
-          <div className="col-md-3 p-0">
-            <div className="form-group server-search mb-0">
-              <span>
-                <i className="fa fa-search"></i>
-              </span>
-              <DebounceInput
-                className="form-control search"
-                minLength={1}
-                debounceTimeout={300}
-                value={searchValue}
-                onChange={searchChange}
-                placeholder="Search"
-              />
-            </div>
-          </div>
-          <div className="col-md-9 p-0">{children}</div>
-        </div>
-        <div className="server-table row">
-          <div className={`col-md-12 ${data.length === 0 ?"hide_pagination" : null}`}>
-          </div>
-        </div>
-      </div>
-    </div>
+    <ServerSideTable 
+      data={data}
+      columns={newColumns}
+      children={children}
+      loading={loading}
+      onPaginationChange={onPaginationChange}
+      pageCount={pageCount}
+      pagination={pagination}
+      onFilter={onFilter}
+      rowSelect={true}
+      rowStates={rowSelection}
+      onSelectRow={setRowSelection}
+    >
+    </ServerSideTable>
   );
 };
+
 export default CheckedTable;
