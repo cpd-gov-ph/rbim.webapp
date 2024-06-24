@@ -1,83 +1,79 @@
-
-import { useEffect, useState } from "react";
-import ServerSideTable from "../../components/ServerSideTable";
-import { postData } from "../../api";
-import Loader from "../../components/Loader";
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import './style.scss'
+import { FaAngleRight } from 'react-icons/fa';
 import moment from "moment";
 import Badge from 'react-bootstrap/Badge';
-import { FaAngleRight } from 'react-icons/fa';
-import { useNavigate } from "react-router-dom";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+
+import { postData } from "../../api";
+import Loader from "../../components/Loader";
+import ServerSideTable from "../../components/ServerSideTable";
+import { usePagination } from "../../components/ServerSideTable/usePagination";
+
 import RecorrectionIcon from '../../assets/images/recorrection_icon.png';
+import './style.scss'
 
 const PendingSurvey = () => {
-
   let navigate = useNavigate();
   const [initLoading, setInitLoading] = useState(false);
   const [surveyList, setSurveyList] = useState([]);
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizeperPage] = useState(10);
   const [totalSize, setTotalSize] = useState(0);
 
-  useEffect(() => {
-    getSurveyList(page, sizePerPage, "",true);
-  }, []);
+  const { onPaginationChange, pagination } = usePagination();
 
-
-  const getSurveyList = async (page, sizePerPage, search,loading) => {
-    setInitLoading(loading);
-    let obj = {
-      page: page,
-      page_size: sizePerPage,
-      search: search ? search : "",
+  const getSurveyList = useCallback(async(search="") => {
+    let params = {
+      page: pagination.pageIndex + 1,
+      page_size: pagination.pageSize,
+      search: search,
       status: "pending_for_approval",
     };
+    try {
+      const res = await postData("get-survey-list/", {}, params);
+      if (res && res.status === 1) {
+        setSurveyList(res.data)
+        setTotalSize(Math.ceil(res.paginator.total_records / params.page_size));
+        setInitLoading(false);
+      } else if (res.status === 422) {
+        setInitLoading(false);
+      } else {
+        setInitLoading(false);
+        toast.error(res.message, { theme: "colored" });
+      }
+    } catch (err) { }
+  }, [pagination]);
 
-    const res = await postData("get-survey-list/", {}, obj);
-    if (res.status === 1) {
-      setTotalSize(res.paginator.total_records);
-      setSurveyList(res.data)
-      setInitLoading(false);
-    } else if (res.status === 422) {
-      setInitLoading(false);
-    } else {
-      setInitLoading(false);
-      toast.error(res.message, { theme: "colored" });
-    }
-  }
-
-  const surveyIDFormatter = (cell, row) => {
+  const surveyIDFormatter = (row) => {
     return (
-      <>
+      <div>
         <div className="survey-id">Survey ID - {row.survey_number}</div>
-      </>
+      </div>
     )
   }
 
-  const surveyDateFormatter = (cell, row) => {
+  const surveyDateFormatter = (row) => {
     return (
-      <>
+      <div>
         <div className="survey-date"><span> Date Assigned  - </span>{moment(row.pending_for_approval_on).format("DD/MM/YYYY")} </div>
-      </>
+      </div>
     )
   }
 
-  const surveyCollectorIdFormatter = (cell, row) => {
+  const surveyCollectorIdFormatter = (row) => {
     return (
-      <>
+      <div>
         <div className="survey-date"><span> Data Reviewer ID  - </span> {row.data_reviewer.official_number} </div>
-      </>
+      </div>
     )
   }
 
-  const surveyStatusFormatter = (cell, row) => {
+  const surveyStatusFormatter = (row) => {
     return (
-      <>
+      <div>
            <Badge pill bg="secondary" className="survey-status">  {row.survey_type ==='ocr' ? "OCR":row.survey_type  } </Badge>
-      </>
+      </div>
     )
   }
 
@@ -87,9 +83,9 @@ const PendingSurvey = () => {
     </Tooltip>
   );
 
-  const surveyRecorrectionAction = (cell, row) => {
+  const surveyRecorrectionAction = (row) => {
     return (
-      <>
+      <div>
         {
           row?.enable_recorrection_flag &&
           <div>
@@ -102,65 +98,18 @@ const PendingSurvey = () => {
             </OverlayTrigger>
           </div>
         }
-      </>
+      </div>
     )
   }
 
-  const surveyAction = (cell, row) => {
+  const surveyAction = (row) => {
     return (
-      <>
+      <div>
         <FaAngleRight className="survey-action" onClick={() => ViewSurveyClick(row)}> </FaAngleRight>
-      </>
+      </div>
     )
   }
-  const columns = [
-
-    {
-      dataField: "survey_number",
-      headerStyle: { width: "30%", textAlign: "left" },
-      style: { textAlign: "left" },
-      formatter: surveyIDFormatter,
-    },
-    {
-      dataField: "assigned_date",
-      headerStyle: { width: "15%", textAlign: "left" },
-      style: { textAlign: "left" },
-      formatter: surveyDateFormatter,
-    },
-    {
-      dataField: "data_collector.official_number",
-      headerStyle: { width: "20%", textAlign: "left" },
-      style: { textAlign: "left" },
-      formatter: surveyCollectorIdFormatter,
-    },
-    {
-      dataField: "survey_type",
-      headerStyle: { width: "20%", textAlign: "left" },
-      style: { textAlign: "left" },
-      formatter: surveyStatusFormatter,
-    },
-    {
-      dataField: "recorrection",
-      headerStyle: { width: "5%", textAlign: "left" },
-      style: { textAlign: "center" },
-      formatter: surveyRecorrectionAction,
-    },
-    {
-      dataField: "action",
-      headerStyle: { width: "10%", textAlign: "left" },
-      style: { textAlign: "center" },
-      formatter: surveyAction,
-    }
-  ];
-
-
-
-  const onFilter = (page, sizePerPage, search) => {
-    setPage(page);
-    setSizeperPage(sizePerPage);
-    getSurveyList(page, sizePerPage, search,false);
-  };
-
+  
   const ViewSurveyClick = (row) => {
     if (row.survey_type === 'ocr') {
       navigate("/ocrsurvey/" + row.id);
@@ -170,26 +119,84 @@ const PendingSurvey = () => {
     }
   }
 
+  const columns = [
+    {
+      accessorKey: "survey_number",
+      headerStyle: { width: "30%", textAlign: "left" },
+      style: { textAlign: "left" },
+      cell: (props) => surveyIDFormatter(
+        props.row.original,
+        ),
+    },
+    {
+      accessorKey: "assigned_date",
+      headerStyle: { width: "15%", textAlign: "left" },
+      style: { textAlign: "left" },
+      cell: (props) => surveyDateFormatter(
+        props.row.original,
+        ),
+    },
+    {
+      accessorKey: "data_collector.official_number",
+      headerStyle: { width: "20%", textAlign: "left" },
+      style: { textAlign: "left" },
+      cell: (props) => surveyCollectorIdFormatter(
+        props.row.original,
+        ),
+    },
+    {
+      accessorKey: "survey_type",
+      headerStyle: { width: "20%", textAlign: "left" },
+      style: { textAlign: "left" },
+      cell: (props) => surveyStatusFormatter(
+        props.row.original,
+        ),
+    },
+    {
+      accessorKey: "recorrection",
+      headerStyle: { width: "5%", textAlign: "left" },
+      style: { textAlign: "center" },
+      cell: (props) => surveyRecorrectionAction(
+        props.row.original,
+        ),
+    },
+    {
+      accessorKey: "action",
+      headerStyle: { width: "10%", textAlign: "left" },
+      style: { textAlign: "center" },
+      cell: (props) => surveyAction(
+        props.row.original,
+        ),
+    }
+  ];
+
+  const onFilter = (search) => {
+    getSurveyList(search);
+  };
+
+  useEffect(() => {
+    getSurveyList("");
+  }, [getSurveyList]);
+
   return (
-    <>
+    <div>
       {!initLoading && (
         <div className="reviewer-survey-list">
           <ServerSideTable
-            columns={columns}
             data={surveyList}
-            page={page}
-            sizePerPage={sizePerPage}
-            totalSize={totalSize}
-            onFilter={onFilter}
+            columns={columns}
             loading={initLoading}
+            onPaginationChange={onPaginationChange}
+            pageCount={totalSize}
+            pagination={pagination}
+            onFilter={onFilter}
             noDataMessage='No surveys assigned'
           >
           </ServerSideTable>
         </div>
       )}
       {initLoading && <Loader />}
-    </>
-
+    </div>
   );
 };
 

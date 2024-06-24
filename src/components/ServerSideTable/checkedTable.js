@@ -13,15 +13,10 @@ const CheckedTable = ({
   pagination,
   onFilter,
   setRows,
+  rowSelection
 }) => {
   const [newColumns, setNewColumns] = useState([]);
-  const [rowSelection, setRowSelection] = useState({});
-
-  useEffect(() => {
-    setRows(rowSelection);
-  }, [setRows, rowSelection])
   
-
   const selectColumns = [
     {
       id: "select",
@@ -63,7 +58,7 @@ const CheckedTable = ({
       onFilter={onFilter}
       rowSelect={true}
       rowStates={rowSelection}
-      onSelectRow={setRowSelection}
+      onSelectRow={setRows}
     >
     </ServerSideTable>
   );
