@@ -10,7 +10,7 @@ import { Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FiInfo } from "react-icons/fi";
 
-import { LIST_ALL, getData, postData, putData, userRole } from "../../api";
+import { getData, postData, putData, userRole } from "../../api";
 import { emailRegx, onlyCharacter, requiredField } from "../../api/regex";
 import Button from "../../components/Form/Button";
 import FormModal from "../../components/FormModal";
@@ -65,20 +65,29 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
     }));
   };
 
-  useEffect(() => {
   // get data reviewer list function
+  useEffect(() => {
     const getDataReviewerNamelist = async (id) => {
       setdataReviewerList([]);
-      let url = "data-reviewer-name-list/" + id + '/';
-      if (userRole().role === 'superadmin') {
-        url = "data-reviewer-name-list/" + LIST_ALL + "/";
+      if (id != null && id !== '') {
+        let url = "data-reviewer-name-list/" + id + "/";
+        console.log(url);
+        const res = await getData(url, {});
+        if (res.status === 1) {
+          setdataReviewerList(formatSelectOptions(res.data));
+        }
       }
-      const res = await getData(url, {});
-      if (res.status === 1) {
-        setdataReviewerList(formatSelectOptions(res.data));
-      }
-    };
+    }
 
+    if (formInputs.barangay_id) {
+      console.log("yown: " + formInputs.barangay_id);
+      getDataReviewerNamelist(formInputs.barangay_id);
+    }
+    else console.log("wala: " + formInputs.barangay_id);
+
+  }, [formInputs.barangay_id]);
+
+  useEffect(() => {
     // get barangay list function
     const getBarangayNamelist = async () => {
       setbarangayList([]);
@@ -128,14 +137,9 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
       getSelectionReviewer(selectedRow.data_reviewer)
       setFormInputs(selectedRow);
     }
-
-    if (formInputs.barangay_id) {
-      getDataReviewerNamelist(formInputs.barangay_id);
-    }
   }, [
     header,
     selectedRow,
-    formInputs.barangay_id,
     ]
   );
 
@@ -255,9 +259,12 @@ const Add = ({ show, onClose, header, selectedRow, is_edit }) => {
       barangay_id: data.value,
       data_reviewer_id: ''
     }));
-    getOfficialNumber(data.value)
-    // empty the data reviewer
-    setDataReviewerValue('')
+    getOfficialNumber(data.value);
+    console.log("meron: " + formInputs.barangay_id);
+    console.log("eto pala:" + data.value);
+
+    formInputs.barangay_id = data.value;
+    setDataReviewerValue('');
   }
 
   const handleReviewerOnChange = (data) => {

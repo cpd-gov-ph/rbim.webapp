@@ -15,7 +15,7 @@ const DataCollector = () => {
   const [loading, setLoading] = useState(false);
   const [modalState, setModalState] = useState('');
   const [selectedRow, setSelectedRow] = useState({});
-  const [isEdit,setIsEdit]=useState(false);
+  const [isEdit,setIsEdit] = useState(false);
 
   //View data collector page
   const viewClick = (row) => {
@@ -40,6 +40,7 @@ const DataCollector = () => {
     {
       accessorKey: "first_name",
       header: "Data Collector Name",
+      id: "Data Collector Name",
       cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "15%", textAlign: "left" },
       style: { textAlign: "left" }
@@ -47,6 +48,7 @@ const DataCollector = () => {
     {
       accessorKey: "barangay.first_name",
       header: "Assigned Barangay Name",
+      id: "Assigned Barangay Name",
       cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "20%", textAlign: "center" },
       style: { textAlign: "center" },
@@ -54,6 +56,7 @@ const DataCollector = () => {
     {
       accessorKey: "profile.official_number",
       header: "DC Code",
+      id : "DC Code",
       cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "17%", textAlign: "center" },
       style: { textAlign: "center" }
@@ -61,6 +64,7 @@ const DataCollector = () => {
     {
       accessorKey: "email",
       header: "Email ID",
+      id: "Email ID",
       cell: (props) => <p>{props.getValue()}</p>,
       headerStyle: { width: "16%", textAlign: "left" },
       style: { textAlign: "left" }
@@ -68,6 +72,7 @@ const DataCollector = () => {
     {
       accessorKey: "action",
       header: "Action",
+      id: "Action",
       headerStyle: { width: "16%", textAlign: "center" },
       cell: (props) => ActionButton(
         props.row.original, 
