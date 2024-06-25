@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import Button from "../../components/Form/Button";
 import FormModal from "../../components/FormModal";
 import { deleteData } from '../../api';
@@ -9,7 +9,7 @@ const ViewTaskModal = ({ show, onClose, deleteTaskId, getListTask }) => {
   const deleteAssignedTask = async () => {
     let id = deleteTaskId;
     const res = await deleteData("delete-task/" + id + "/", {});
-    if (res.status === 1) {
+    if (res !== null && res.status === 1) {
       toast.success(res.message, { theme: "colored" });
       getListTask();
       onClose();

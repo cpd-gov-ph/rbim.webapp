@@ -24,9 +24,11 @@ export const ActionButton = (row, editAction, viewAction, deleteAction, viewTask
               <button className="btn btn-link me-3" onClick={() => viewAction(row)}>
                 <i className="fa fa-eye" aria-hidden="true"></i>
               </button>
-              <button className="btn btn-link" onClick={() => viewTaskAction(row)}>
-                <i className="fa fa-plus-square" aria-hidden="true"></i>
-              </button>
+              {viewTaskAction !== null ? (
+                <button className="btn btn-link" onClick={() => viewTaskAction(row)}>
+                  <i className="fa fa-plus-square" aria-hidden="true"></i>
+                </button>
+              ) : ""}
             </div>
           ) : ''}
         </div>

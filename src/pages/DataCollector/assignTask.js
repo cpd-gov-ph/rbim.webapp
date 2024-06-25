@@ -6,15 +6,13 @@ import Button from "../../components/Form/Button";
 import ClientSideTable from "../../components/ClientSideTable";
 // import './dataCollector.scss';
 import { useParams } from "react-router-dom";
-import { getData, postData, deleteData } from '../../api';
+import { postData } from '../../api';
 import { toast } from "react-toastify";
-import moment from "moment";
 import ViewTaskModal from './viewTaskModal';
 import DeleteTaskModal from './deleteTaskModal';
 
 function ViewAssignedTask() {
   let { id } = useParams();
-  const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
   const [taskList, setTaskList] = useState([]);
   const [selectedRow, setSelectedRow] = useState({});
@@ -76,11 +74,6 @@ function ViewAssignedTask() {
     setviewTaskModal(true);
   };
 
-  // edit task
-  const EditClick = (row) => {
-    console.log(row)
-  };
-
   // delete task
   const DeleteClick = (row) => {
     setDeleteTaskId(row.id);
@@ -91,7 +84,7 @@ function ViewAssignedTask() {
     setviewTaskModal(false);
   };
 
-  const actionButton = (cell, row) => {
+  const actionButton = (row) => {
     return (
       <>
         <div className="action-buttons">
@@ -111,24 +104,24 @@ function ViewAssignedTask() {
 
   const columns = [
     {
-      dataField: "task_no",
-      text: "Task No",
+      accessorKey: "task_no",
+      header: "Task No",
     },
     {
-      dataField: "title",
-      text: "Location allocated",
+      accessorKey: "title",
+      header: "Location allocated",
     },
     {
-      dataField: "description",
-      text: "Notes",
+      accessorKey: "description",
+      header: "Notes",
       headerStyle: { width: "30%" },
       style: { whiteSpace: 'pre-wrap', width: "30%",  overflowWrap:'anywhere'},
     },
     {
-      dataField: "action",
-      text: "Action",
+      accessorKey: "action",
+      header: "Action",
       headerStyle: { width: "15%", textAlign: "center" },
-      formatter: actionButton,
+      cell: (props) => actionButton(props.row.original),
       style: { textAlign: "center" },
     },
   ];
@@ -160,8 +153,8 @@ function ViewAssignedTask() {
                 <div className="row">
                   <div className="col-md-12">
                     <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
-                      <Form.Label column sm={4} className="required">Locality name</Form.Label>
-                      <Col column sm={8}>
+                      <Form.Label column="true" sm={4} className="required">Locality name</Form.Label>
+                      <Col column="true" sm={8}>
                         <Form.Control type="text"
                           name="title"
                           value={taskObject.title}
@@ -173,8 +166,8 @@ function ViewAssignedTask() {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
-                      <Form.Label column sm={4} className="required">Notes</Form.Label>
-                      <Col column sm={8} className="position-relative">
+                      <Form.Label column="true" sm={4} className="required">Notes</Form.Label>
+                      <Col column="true" sm={8} className="position-relative">
                         <Form.Control
                           type="text"
                           as="textarea"
@@ -211,8 +204,8 @@ function ViewAssignedTask() {
                 </Button>
                 <Button
                   type="submit"
-                  disabled={loading}
-                  loading={loading}
+                  disabled={false}
+                  loading={false}
                   className="btn-primary button-width text-white"
                 >
                   Assign
