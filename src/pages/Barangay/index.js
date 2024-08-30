@@ -16,7 +16,7 @@ const Barangay = () => {
   const [sizePerPage, setSizeperPage] = useState(10);
   const [totalSize, setTotalSize] = useState(0);
   const [userList, setUserList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [modalState, setModalState] = useState('');
   const [isEdit,setIsEdit]=useState(false);
   const [selectedRow, setSelectedRow] = useState({});
@@ -52,37 +52,48 @@ const Barangay = () => {
     {
       accessorKey: "first_name",
       header: "Barangay Official Name",
+      id: "Barangay Official Name",
       headerStyle: { width: "15%", textAlign: "left" },
-      style: { textAlign: "left" }
+      style: { textAlign: "left" },
+      cell: (props) => <p>{props.getValue()}</p>,
     },
     {
       accessorKey: "location_info.name",
       header: "Assigned Barangay",
+      id: "Assigned Barangay",
       headerStyle: { width: "15%", textAlign: "left" },
       style: { textAlign: "center" },
+      cell: (props) => <p>{props.getValue()}</p>,
       //   formatter: PhoneNumber,
     },
     {
       accessorKey: "profile.official_number",
       header: "BO Code",
+      id: "BO Code",
       headerStyle: { width: "20%", textAlign: "center" },
-      style: { textAlign: "center" }
+      style: { textAlign: "center" },
+      cell: (props) => <p>{props.getValue()}</p>,
     },
     {
       accessorKey: "email",
       header: "BO Email ID",
+      id: "BO Email ID",
       headerStyle: { width: "29%", textAlign: "left" },
-      style: { textAlign: "left" }
+      style: { textAlign: "left" },
+      cell: (props) => <p>{props.getValue()}</p>
     },
     {
       accessorKey: 'profile.phone_no',
       header: "BO Mobile Number",
+      id : "BO Mobile Number",
       headerStyle: { width: "25%", textAlign: "left" },
-      style: { textAlign: "left" }
+      style: { textAlign: "left" },
+      cell: (props) => <p>{props.getValue()}</p>,
     },
     {
       accessorKey: "action",
       header: "Action",
+      id: "Action",
       cell: (props) => ActionButton(
         props.row.original, 
         editClick, 
@@ -121,6 +132,7 @@ const Barangay = () => {
     getBarangayList(page, sizePerPage, "");
     //setLoading(true);
   };
+
   useEffect(() => {
     getBarangayList("");
   }, [getBarangayList]);
